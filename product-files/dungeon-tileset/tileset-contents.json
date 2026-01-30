@@ -1,0 +1,24 @@
+{
+  "floors": [
+    "stone_floor",
+    "cracked_stone",
+    "moss_stone"
+  ],
+  "walls": [
+    "stone_wall",
+    "brick_wall",
+    "cave_wall"
+  ],
+  "decorations": [
+    "torch",
+    "barrel",
+    "chest",
+    "bones"
+  ],
+  "interactive": [
+    "door",
+    "lever",
+    "pressure_plate",
+    "stairs"
+  ]
+}

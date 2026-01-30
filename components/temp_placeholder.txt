@@ -1,0 +1,8 @@
+import { startCase } from "lodash";
+import { type NextSSRPlugin } from "uploadthing/next-ssr-plugin";
+import { extractRouterConfig } from "uploadthing/server";
+import { ourFileRouter } from "@/app/api/uploadthing/core";
+
+// This is not strictly a file content update but I am placing it here to remember 
+// that we might need to add the SSR plugin to layout if issues arise.
+// For now, the utils are enough.

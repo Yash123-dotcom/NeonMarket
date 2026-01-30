@@ -1,0 +1,20 @@
+HEROES:
+- Knight.png
+- Mage.png
+- Archer.png
+- Rogue.png
+
+VILLAINS:
+- Dark_Knight.png
+- Evil_Mage.png
+- Orc_Warrior.png
+
+NPCS:
+- Merchant.png
+- Blacksmith.png
+- Innkeeper.png
+
+MONSTERS:
+- Goblin.png
+- Skeleton.png
+- Dragon.png

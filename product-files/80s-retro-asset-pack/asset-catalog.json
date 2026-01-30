@@ -1,0 +1,18 @@
+{
+  "categories": {
+    "nature": [
+      "Palm_Tree_01",
+      "Palm_Tree_02",
+      "Sunset_Sky"
+    ],
+    "vehicles": [
+      "Retro_Car_01",
+      "Retro_Car_02"
+    ],
+    "effects": [
+      "Neon_Glow",
+      "Chrome_Material",
+      "Grid_Pattern"
+    ]
+  }
+}

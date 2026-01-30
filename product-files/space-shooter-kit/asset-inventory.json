@@ -1,0 +1,27 @@
+{
+  "ships": {
+    "player": [
+      "Fighter_01",
+      "Fighter_02",
+      "Bomber_01"
+    ],
+    "enemies": [
+      "Scout",
+      "Fighter",
+      "Bomber",
+      "Boss_01"
+    ]
+  },
+  "weapons": [
+    "Laser",
+    "Plasma",
+    "Missile",
+    "Beam"
+  ],
+  "powerups": [
+    "Health",
+    "Shield",
+    "Speed",
+    "Weapon_Upgrade"
+  ]
+}

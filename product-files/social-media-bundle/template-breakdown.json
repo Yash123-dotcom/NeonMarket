@@ -1,0 +1,15 @@
+{
+  "instagram": {
+    "posts": 50,
+    "stories": 40,
+    "highlights": 15
+  },
+  "facebook": {
+    "posts": 30,
+    "covers": 10
+  },
+  "youtube": {
+    "thumbnails": 35,
+    "banners": 8
+  }
+}

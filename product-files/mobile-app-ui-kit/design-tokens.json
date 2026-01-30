@@ -1,0 +1,23 @@
+{
+  "colors": {
+    "primary": "#007AFF",
+    "secondary": "#5856D6",
+    "success": "#34C759",
+    "warning": "#FF9500",
+    "error": "#FF3B30"
+  },
+  "typography": {
+    "heading": "SF Pro Display",
+    "body": "SF Pro Text",
+    "sizes": [
+      12,
+      14,
+      16,
+      18,
+      20,
+      24,
+      28,
+      32
+    ]
+  }
+}

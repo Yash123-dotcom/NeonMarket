@@ -1,0 +1,18 @@
+{
+  "categories": {
+    "cotton": [
+      "White Cotton",
+      "Blue Denim",
+      "Canvas"
+    ],
+    "silk": [
+      "Smooth Silk",
+      "Textured Silk"
+    ],
+    "leather": [
+      "Brown Leather",
+      "Black Leather",
+      "Vintage Leather"
+    ]
+  }
+}

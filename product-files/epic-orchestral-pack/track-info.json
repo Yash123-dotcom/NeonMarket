@@ -1,0 +1,18 @@
+{
+  "tracks": [
+    {
+      "name": "Epic Battle",
+      "duration": "3:45",
+      "bpm": 140,
+      "key": "C minor",
+      "mood": "Intense, Heroic"
+    },
+    {
+      "name": "Heroes Rise",
+      "duration": "4:12",
+      "bpm": 120,
+      "key": "D major",
+      "mood": "Uplifting, Triumphant"
+    }
+  ]
+}

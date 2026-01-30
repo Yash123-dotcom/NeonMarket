@@ -1,26 +1,104 @@
-@import "tailwindcss";
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
+@layer base {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    /* Apple Design System (Light Mode Default) */
+    --background: 0 0% 100%; /* Pure White for pages */
+    --foreground: 240 4% 12%; /* #1d1d1f - Apple's text black */
+
+    --card: 0 0% 100%;
+    --card-foreground: 240 4% 12%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 240 4% 12%;
+
+    --primary: 211 100% 50%; /* #007aff - Apple System Blue */
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 240 5% 96%; /* #f5f5f7 - Light gray grouping background */
+    --secondary-foreground: 240 4% 12%;
+
+    --muted: 240 5% 96%;
+    --muted-foreground: 240 4% 50%; /* #86868b - Secondary text */
+
+    --accent: 211 100% 50%; 
+    --accent-foreground: 0 0% 100%;
+
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 240 6% 90%;
+    --input: 240 6% 90%;
+    --ring: 211 100% 50%;
+
+    --radius: 0.75rem; /* 12px default radius */
+  }
+
+  .dark {
+    /* Apple Dark Mode */
+    --background: 0 0% 0%; /* Pure Black */
+    --foreground: 0 0% 96%; /* #f5f5f7 */
+
+    --card: 240 4% 10%; /* Very dark gray for cards */
+    --card-foreground: 0 0% 96%;
+
+    --popover: 240 4% 10%;
+    --popover-foreground: 0 0% 96%;
+
+    --primary: 211 100% 50%; /* Same blue, or slightly lighter */
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 240 4% 16%; /* Dark gray secondary */
+    --secondary-foreground: 0 0% 96%;
+
+    --muted: 240 4% 16%;
+    --muted-foreground: 240 5% 64%;
+
+    --accent: 211 100% 50%;
+    --accent-foreground: 0 0% 100%;
+
+    --destructive: 0 62% 30%;
+    --destructive-foreground: 0 0% 96%;
+
+    --border: 240 4% 16%;
+    --input: 240 4% 16%;
+    --ring: 211 100% 50%;
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground antialiased selection:bg-blue-100 selection:text-blue-900 dark:selection:bg-blue-900 dark:selection:text-blue-100;
+  }
+}
+
+/* Invisible/Clean Scrollbar */
+::-webkit-scrollbar {
+  width: 0px;
+  background: transparent;
+}
+
+/* Premium Apple-style Utilities */
+@layer utilities {
+  .glass-premium {
+    @apply bg-white/70 dark:bg-black/70 backdrop-blur-xl border border-white/20 dark:border-white/10 shadow-sm;
+  }
+
+  .shadow-apple {
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+  }
+  
+  .shadow-apple-hover {
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.08), 0 4px 6px -2px rgba(0, 0, 0, 0.04);
+  }
+
+  /* Typography utilities */
+  .text-balance {
+    text-wrap: balance;
+  }
 }

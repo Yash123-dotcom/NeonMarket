@@ -1,0 +1,15 @@
+STEEL MATERIALS:
+- Steel_Brushed_01
+- Steel_Polished_01
+- Steel_Rusted_01
+- Steel_Galvanized_01
+
+ALUMINUM MATERIALS:
+- Aluminum_Anodized_01
+- Aluminum_Brushed_01
+- Aluminum_Cast_01
+
+COPPER MATERIALS:
+- Copper_Polished_01
+- Copper_Oxidized_01
+- Brass_Antique_01

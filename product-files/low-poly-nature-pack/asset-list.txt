@@ -1,0 +1,20 @@
+TREES:
+- Pine_Tree_01.fbx (234 tris)
+- Pine_Tree_02.fbx (187 tris)
+- Oak_Tree_01.fbx (456 tris)
+- Palm_Tree_01.fbx (123 tris)
+
+ROCKS:
+- Rock_Small_01.fbx (45 tris)
+- Rock_Medium_01.fbx (89 tris)
+- Rock_Large_01.fbx (234 tris)
+
+PLANTS:
+- Grass_Patch_01.fbx (23 tris)
+- Bush_01.fbx (67 tris)
+- Flower_01.fbx (34 tris)
+
+TERRAIN:
+- Ground_Tile_01.fbx (4 tris)
+- Hill_01.fbx (156 tris)
+- Cliff_01.fbx (289 tris)

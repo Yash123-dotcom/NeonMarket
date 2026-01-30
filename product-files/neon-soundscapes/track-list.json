@@ -1,0 +1,19 @@
+{
+  "tracks": [
+    {
+      "name": "Neon Rain",
+      "duration": "3:45",
+      "type": "ambient"
+    },
+    {
+      "name": "Digital Streets",
+      "duration": "4:12",
+      "type": "urban"
+    },
+    {
+      "name": "Cyber Wind",
+      "duration": "2:30",
+      "type": "atmospheric"
+    }
+  ]
+}

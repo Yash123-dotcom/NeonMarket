@@ -1,0 +1,15 @@
+FIRE EFFECTS:
+- Campfire.prefab
+- Torch.prefab
+- Explosion.prefab
+- Dragon_Breath.prefab
+
+SMOKE EFFECTS:
+- Chimney_Smoke.prefab
+- Cigarette_Smoke.prefab
+- Industrial_Smoke.prefab
+
+MAGICAL EFFECTS:
+- Sparkles.prefab
+- Magic_Aura.prefab
+- Teleport.prefab

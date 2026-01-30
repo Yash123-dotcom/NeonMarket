@@ -1,0 +1,14 @@
+MATRIX EFFECTS:
+- Code_Rain_Green.prefab
+- Code_Rain_Blue.prefab
+- Binary_Stream.prefab
+
+DATA EFFECTS:
+- Network_Pulse.prefab
+- Data_Transfer.prefab
+- Signal_Transmission.prefab
+
+HOLOGRAPHIC:
+- Holo_Display.prefab
+- Scan_Lines.prefab
+- Digital_Glitch.prefab

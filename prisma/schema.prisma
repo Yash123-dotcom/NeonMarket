@@ -1,0 +1,219 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+// SWITCHED TO POSTGRESQL AS REQUESTED
+// IMPORTANT: You must update your .env with a valid DATABASE_URL for PostgreSQL
+// Example: DATABASE_URL="postgresql://user:password@localhost:5432/neonmarket?schema=public"
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// -----------------------------------------------------------------------------
+// 1. THE USER MODEL (Sellers & Buyers)
+// -----------------------------------------------------------------------------
+model User {
+  id                     String    @id // Clerk User ID
+  email                  String    @unique
+  name                   String?
+  createdAt              DateTime  @default(now())
+  updatedAt              DateTime  @updatedAt
+
+  // Seller Details
+  stripeConnectAccountId String?   @unique
+  isSeller               Boolean   @default(false)
+
+  // Relations
+  products               Product[]
+  orders                 Order[]
+  reviews                Review[]
+  notifications          Notification[]
+  coupons                Coupon[]
+  analytics              Analytics[]
+
+  @@index([email])
+}
+
+// -----------------------------------------------------------------------------
+// 2. THE PRODUCT MODEL
+// -----------------------------------------------------------------------------
+model Product {
+  id          String   @id @default(uuid())
+  name        String
+  description String
+  price       Int      // "Base Price" in cents
+  imagePath   String
+  filePath    String
+  stock       Int      @default(0) // For finite assets
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  // Relation to Seller
+  userId      String
+  user        User     @relation(fields: [userId], references: [id], onDelete: Restrict)
+
+  // Sub-resources
+  orderItems            OrderItem[]
+  downloadVerifications DownloadVerification[]
+  reviews               Review[]
+  licenseTiers          LicenseTier[] // NEW: For Personal vs Commercial
+
+  @@unique([name, userId])
+  @@index([userId])
+  @@index([isActive])
+}
+
+// -----------------------------------------------------------------------------
+// 3. LICENSE TIERS (NEW)
+// -----------------------------------------------------------------------------
+model LicenseTier {
+  id          String   @id @default(uuid())
+  name        String   // e.g. "Personal", "Commercial", "Exclusive"
+  description String?
+  price       Int      // Specific price in cents for this tier
+  
+  productId   String
+  product     Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  
+  items       OrderItem[] // Link orders to specific licenses
+
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([productId])
+}
+
+// -----------------------------------------------------------------------------
+// 4. THE ORDER MODEL
+// -----------------------------------------------------------------------------
+model Order {
+  id                    String   @id @default(uuid())
+  pricePaidInCents      Int
+  createdAt             DateTime @default(now())
+  isPaid                Boolean  @default(false)
+  updatedAt             DateTime @updatedAt
+  
+  stripePaymentIntentId String?  @unique
+
+  // Buyer
+  userId                String
+  user                  User     @relation(fields: [userId], references: [id], onDelete: Restrict)
+
+  items                 OrderItem[]
+  
+  @@index([userId])
+  @@index([isPaid])
+}
+
+// -----------------------------------------------------------------------------
+// 5. HELPER MODELS (Order Items)
+// -----------------------------------------------------------------------------
+model OrderItem {
+  id        String   @id @default(uuid())
+  quantity  Int      @default(1)
+  price     Int      // Price frozen at purchase time
+
+  orderId   String
+  order     Order    @relation(fields: [orderId], references: [id], onDelete: Cascade)
+
+  productId String
+  product   Product  @relation(fields: [productId], references: [id], onDelete: Restrict)
+  
+  // Optional: Which license was bought?
+  licenseTierId String?
+  licenseTier   LicenseTier? @relation(fields: [licenseTierId], references: [id])
+
+  @@index([orderId])
+  @@index([productId])
+}
+
+model DownloadVerification {
+  id        String   @id @default(uuid())
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+  
+  productId String
+  product   Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  
+  @@index([productId])
+}
+
+// -----------------------------------------------------------------------------
+// 6. REVIEWS
+// -----------------------------------------------------------------------------
+model Review {
+  id        String   @id @default(uuid())
+  rating    Int
+  comment   String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  productId String
+  product   Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, productId])
+  @@index([productId])
+}
+
+// -----------------------------------------------------------------------------
+// 6a. NOTIFICATIONS (Added Back)
+// -----------------------------------------------------------------------------
+model Notification {
+  id        String   @id @default(uuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  title     String
+  message   String
+  isRead    Boolean  @default(false)
+  type      String   // "SALE", "PURCHASE", "SYSTEM"
+  link      String?
+  
+  createdAt DateTime @default(now())
+
+  @@index([userId])
+}
+
+// -----------------------------------------------------------------------------
+// 7. COUPONS
+// -----------------------------------------------------------------------------
+model Coupon {
+  id         String   @id @default(uuid())
+  code       String   @unique
+  percentOff Int
+  isActive   Boolean  @default(true)
+  
+  userId     String
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@index([code])
+  @@index([userId])
+}
+
+// -----------------------------------------------------------------------------
+// 8. ANALYTICS (NEW)
+// -----------------------------------------------------------------------------
+model Analytics {
+  id        String   @id @default(uuid())
+  date      DateTime @db.Date // Store daily aggregates
+  revenue   Int      @default(0) // Total revenue in cents
+  sales     Int      @default(0) // Count of sales
+  views     Int      @default(0) // Product Page Views (optional)
+  
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([date, userId]) // One record per day per user
+  @@index([userId])
+}

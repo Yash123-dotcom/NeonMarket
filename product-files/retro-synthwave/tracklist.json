@@ -1,0 +1,19 @@
+{
+  "tracks": [
+    {
+      "name": "Neon Nights",
+      "duration": "4:23",
+      "bpm": 128
+    },
+    {
+      "name": "Cyber Dreams",
+      "duration": "3:45",
+      "bpm": 120
+    },
+    {
+      "name": "Retro Future",
+      "duration": "5:12",
+      "bpm": 140
+    }
+  ]
+}

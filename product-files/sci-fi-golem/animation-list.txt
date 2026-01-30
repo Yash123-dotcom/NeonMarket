@@ -1,0 +1,15 @@
+LOCOMOTION:
+- Idle_01.fbx
+- Idle_02.fbx
+- Walk.fbx
+- Run.fbx
+
+COMBAT:
+- Attack_Punch.fbx
+- Attack_Slam.fbx
+- Attack_Combo.fbx
+- Death.fbx
+
+EMOTES:
+- Roar.fbx
+- Taunt.fbx

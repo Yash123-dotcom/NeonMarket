@@ -1,0 +1,30 @@
+{
+  "interface": [
+    "home",
+    "menu",
+    "search",
+    "settings",
+    "user"
+  ],
+  "business": [
+    "chart",
+    "briefcase",
+    "calendar",
+    "document",
+    "presentation"
+  ],
+  "technology": [
+    "smartphone",
+    "laptop",
+    "cloud",
+    "database",
+    "wifi"
+  ],
+  "social": [
+    "facebook",
+    "twitter",
+    "instagram",
+    "linkedin",
+    "youtube"
+  ]
+}

@@ -1,0 +1,19 @@
+{
+  "vehicles": [
+    {
+      "name": "Cyber Hovercar",
+      "polygons": 8500,
+      "textures": "4K PBR"
+    },
+    {
+      "name": "Plasma Fighter",
+      "polygons": 12000,
+      "textures": "4K PBR"
+    },
+    {
+      "name": "Battle Mech",
+      "polygons": 15000,
+      "textures": "4K PBR"
+    }
+  ]
+}

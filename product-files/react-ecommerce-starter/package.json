@@ -1,0 +1,17 @@
+{
+  "name": "react-ecommerce-starter",
+  "version": "1.0.0",
+  "description": "Complete React e-commerce template",
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start"
+  },
+  "dependencies": {
+    "next": "^14.0.0",
+    "react": "^18.0.0",
+    "stripe": "^14.0.0",
+    "tailwindcss": "^3.0.0",
+    "@clerk/nextjs": "^4.0.0"
+  }
+}
