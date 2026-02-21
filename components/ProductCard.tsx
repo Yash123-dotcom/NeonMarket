@@ -1,9 +1,17 @@
 "use client";
 
-import { Product } from "@prisma/client";
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { GlassCard } from "./GlassCard";
+
+interface Product {
+  id?: string;
+  _id?: string;
+  name: string;
+  price: number;
+  imagePath: string;
+  description?: string;
+}
 
 interface ProductCardProps {
   product: Product;

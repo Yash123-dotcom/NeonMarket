@@ -1,5 +1,4 @@
 import { z } from "zod";
-import { Prisma } from "@prisma/client";
 
 // -----------------------------------------------------------------------------
 // GLOBAL API RESPONSE TYPE
@@ -57,28 +56,39 @@ export const reviewSchema = z.object({
 // -----------------------------------------------------------------------------
 
 // Product with Relations (Commonly used in dashboards/grids)
-export type ProductWithRelations = Prisma.ProductGetPayload<{
-  include: {
-    licenseTiers: true;
-    user: {
-      select: { name: true; email: true };
-    };
-    _count: {
-      select: { reviews: true; orderItems: true };
-    };
-  };
-}>;
+export type ProductWithRelations = {
+  id: string;
+  name: string;
+  description: string;
+  price: number;
+  imagePath: string;
+  filePath: string;
+  stock: number;
+  isActive: boolean;
+  userId: string;
+  createdAt: Date;
+  updatedAt: Date;
+  user?: { name?: string; email?: string };
+  reviews?: any[];
+  _count?: { reviews?: number; orderItems?: number };
+};
 
-export type OrderWithItems = Prisma.OrderGetPayload<{
-  include: {
-    items: {
-      include: {
-        product: true;
-      };
-    };
-  };
-}>;
+export type OrderWithItems = {
+  id: string;
+  userId: string;
+  pricePaidInCents: number;
+  isPaid: boolean;
+  stripePaymentIntentId?: string;
+  createdAt: Date;
+  updatedAt: Date;
+  items: {
+    id?: string;
+    productId: string;
+    quantity: number;
+    price: number;
+    product?: ProductWithRelations;
+  }[];
+};
 
-// Coupon (Simple type since Payload is failing)
-// export type CouponWithUsage = Prisma.CouponGetPayload<{ ... }>; 
+// Coupon (Simple type)
 export type CouponWithUsage = any;

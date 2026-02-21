@@ -1,9 +1,18 @@
 'use client';
 
-import { Product } from '@prisma/client';
 import { useCart } from '@/hooks/use-cart';
 import { useState, useEffect } from 'react';
 import { ShoppingCart, Check } from 'lucide-react';
+
+interface Product {
+  id?: string;
+  _id?: string;
+  name: string;
+  price: number;
+  imagePath: string;
+  description: string;
+  filePath: string;
+}
 
 interface AddToCartButtonProps {
   product: Product;
@@ -26,17 +35,17 @@ export default function AddToCartButton({ product }: AddToCartButtonProps) {
     );
   }
 
-  const inCart = isInCart(product.id);
+  const inCart = isInCart(product.id ?? product._id ?? '');
 
   const handleClick = () => {
     if (!inCart) {
       addItem({
-        id: product.id,
+        id: product.id ?? product._id ?? '',
         name: product.name,
         price: product.price,
         imagePath: product.imagePath,
         description: product.description,
-        filePath: product.filePath,
+        filePath: product.filePath ?? '',
       });
     }
   };
