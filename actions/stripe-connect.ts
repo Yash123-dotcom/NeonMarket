@@ -1,71 +1,58 @@
 "use server";
 
-import { currentUser } from "@clerk/nextjs/server"; // <--- CHANGED THIS IMPORT
+import { currentUser } from "@clerk/nextjs/server";
 import { stripe } from "@/lib/stripe";
-import { prisma } from "@/lib/db";
+import { connectDB } from "@/lib/db";
+import { User } from "@/lib/models/User";
 import { redirect } from "next/navigation";
 
 export async function createSellerAccount() {
-  const user = await currentUser(); // <--- CHANGED THIS CALL
+  const user = await currentUser();
+  if (!user) return redirect("/sign-in");
 
-  if (!user) {
-    return redirect("/sign-in");
-  }
+  await connectDB();
 
-  // 1. Check if user exists in our DB
-  let existingUser = await prisma.user.findUnique({
-    where: { id: user.id },
-  });
+  let existingUser = await User.findById(user.id).lean();
 
-  // 2. Fallback: If not in DB (Webhook failed or latency), create them now.
+  // Fallback: create user in DB if webhook missed them
   if (!existingUser) {
     console.log("User not found in DB. Creating fallback user...");
-    const email = user.emailAddresses[0].emailAddress;
-    const name = `${user.firstName} ${user.lastName || ""}`.trim();
-    
-    existingUser = await prisma.user.create({
-      data: {
-        id: user.id,
-        email: email, 
-        name: name || "Seller",
+    existingUser = await User.findByIdAndUpdate(
+      user.id,
+      {
+        _id: user.id,
+        email: user.emailAddresses[0].emailAddress,
+        name: `${user.firstName} ${user.lastName || ""}`.trim() || "Seller",
       },
-    });
+      { upsert: true, new: true }
+    );
   }
 
-  let accountId = existingUser.stripeConnectAccountId;
+  let accountId = existingUser!.stripeConnectAccountId;
 
-  // 2. If no Stripe ID, Create one
   if (!accountId) {
     const account = await stripe.accounts.create({
       type: "express",
       country: "US",
-      email: user.emailAddresses[0].emailAddress, // <--- Access email correctly from Clerk
+      email: user.emailAddresses[0].emailAddress,
       capabilities: {
         card_payments: { requested: true },
         transfers: { requested: true },
       },
-      metadata: {
-        userId: user.id,
-      },
+      metadata: { userId: user.id },
     });
 
     accountId = account.id;
 
-    // Save Stripe ID to Database
-    await prisma.user.update({
-      where: { id: user.id },
-      data: { stripeConnectAccountId: accountId },
-    });
+    await User.findByIdAndUpdate(user.id, { stripeConnectAccountId: accountId });
   }
 
-  // 3. Create the Onboarding Link
   const accountLink = await stripe.accountLinks.create({
-    account: accountId,
+    account: accountId!,
     refresh_url: `${process.env.NEXT_PUBLIC_URL}/sell`,
     return_url: `${process.env.NEXT_PUBLIC_URL}/dashboard`,
     type: "account_onboarding",
   });
 
-  // 4. Send them to Stripe
   return redirect(accountLink.url);
 }

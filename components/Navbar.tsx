@@ -34,7 +34,7 @@ export default function Navbar() {
     <nav
       className={`fixed top-0 w-full z-50 transition-all duration-300 ${
         isScrolled
-          ? 'bg-white/80 dark:bg-black/80 backdrop-blur-xl border-b border-white/10'
+          ? 'bg-black/50 backdrop-blur-xl border-b border-white/10 shadow-lg'
           : 'bg-transparent py-4'
       }`}
     >
@@ -42,7 +42,7 @@ export default function Navbar() {
         {/* Logo */}
         <Link
           href='/'
-          className='text-[19px] font-semibold tracking-tight text-black dark:text-white flex items-center gap-2'
+          className='text-[19px] font-semibold tracking-tight text-white flex items-center gap-2'
         >
           NeonMarket
         </Link>
@@ -51,31 +51,31 @@ export default function Navbar() {
         <div className='hidden md:flex items-center gap-8'>
           <Link
             href='/products'
-            className='text-[13px] font-medium text-zinc-600 dark:text-zinc-300 hover:text-black dark:hover:text-white transition-colors'
+            className='text-[13px] font-medium text-zinc-400 hover:text-white transition-colors'
           >
             Store
           </Link>
           <Link
             href='/categories'
-            className='text-[13px] font-medium text-zinc-600 dark:text-zinc-300 hover:text-black dark:hover:text-white transition-colors'
+            className='text-[13px] font-medium text-zinc-400 hover:text-white transition-colors'
           >
             Categories
           </Link>
           <Link
             href='/sell'
-            className='text-[13px] font-medium text-zinc-600 dark:text-zinc-300 hover:text-black dark:hover:text-white transition-colors'
+            className='text-[13px] font-medium text-zinc-400 hover:text-white transition-colors'
           >
             Sell
           </Link>
           <Link
             href='/about'
-            className='text-[13px] font-medium text-zinc-600 dark:text-zinc-300 hover:text-black dark:hover:text-white transition-colors'
+            className='text-[13px] font-medium text-zinc-400 hover:text-white transition-colors'
           >
             About
           </Link>
           <Link
             href='/support'
-            className='text-[13px] font-medium text-zinc-600 dark:text-zinc-300 hover:text-black dark:hover:text-white transition-colors'
+            className='text-[13px] font-medium text-zinc-400 hover:text-white transition-colors'
           >
             Support
           </Link>
@@ -86,11 +86,11 @@ export default function Navbar() {
           {/* Cart */}
           <Link
             href='/cart'
-            className='relative group'
+            className='relative group flex items-center justify-center'
           >
-            <ShoppingBag className='w-5 h-5 text-zinc-500 hover:text-black dark:text-zinc-400 dark:hover:text-white transition-colors' strokeWidth={1.5} />
+            <ShoppingBag className='w-5 h-5 text-zinc-400 group-hover:text-white transition-colors' strokeWidth={1.5} />
             {totalItems > 0 && (
-              <span className='absolute -top-1 -right-1 w-4 h-4 bg-black dark:bg-white text-white dark:text-black text-[10px] font-bold rounded-full flex items-center justify-center'>
+              <span className='absolute -top-1.5 -right-2 w-[18px] h-[18px] bg-blue-500 text-white text-[10px] font-bold rounded-full flex items-center justify-center shadow-lg shadow-blue-500/20'>
                 {totalItems}
               </span>
             )}
@@ -98,10 +98,12 @@ export default function Navbar() {
 
           {/* User Button */}
           {isSignedIn ? (
-            <UserButton afterSignOutUrl='/' />
+            <div className="flex items-center justify-center p-0.5 rounded-full bg-gradient-to-r from-blue-500/20 to-cyan-400/20 border border-white/5">
+              <UserButton afterSignOutUrl='/' />
+            </div>
           ) : (
             <SignInButton mode='modal'>
-              <button className='text-[13px] font-medium text-zinc-600 hover:text-black dark:text-zinc-300 dark:hover:text-white transition-colors'>
+              <button className='text-[13px] font-medium text-zinc-300 hover:text-white transition-colors bg-white/5 hover:bg-white/10 px-4 py-2 rounded-full border border-white/10'>
                 Sign in
               </button>
             </SignInButton>
@@ -113,9 +115,9 @@ export default function Navbar() {
             className='md:hidden p-1'
           >
             {mobileMenuOpen ? (
-              <X className='w-5 h-5 text-zinc-800 dark:text-white' />
+              <X className='w-5 h-5 text-white' />
             ) : (
-              <Menu className='w-5 h-5 text-zinc-800 dark:text-white' />
+              <Menu className='w-5 h-5 text-white' />
             )}
           </button>
         </div>
@@ -123,32 +125,32 @@ export default function Navbar() {
 
       {/* Mobile Menu */}
       {mobileMenuOpen && (
-        <div className='md:hidden absolute top-full left-0 w-full bg-white dark:bg-black border-b border-zinc-100 dark:border-zinc-800 shadow-xl'>
+        <div className='md:hidden absolute top-full left-0 w-full bg-black/95 backdrop-blur-3xl border-b border-white/10 shadow-xl'>
           <div className='px-6 py-6 space-y-4'>
             <Link
               href='/products'
-              className='block text-xl font-semibold text-zinc-900 dark:text-white'
+              className='block text-xl font-semibold text-white'
               onClick={() => setMobileMenuOpen(false)}
             >
               Store
             </Link>
             <Link
               href='/categories'
-              className='block text-xl font-semibold text-zinc-900 dark:text-white'
+              className='block text-xl font-semibold text-white'
               onClick={() => setMobileMenuOpen(false)}
             >
               Categories
             </Link>
             <Link
               href='/sell'
-              className='block text-xl font-semibold text-zinc-900 dark:text-white'
+              className='block text-xl font-semibold text-white'
               onClick={() => setMobileMenuOpen(false)}
             >
               Sell
             </Link>
             <Link
               href='/about'
-              className='block text-xl font-semibold text-zinc-900 dark:text-white'
+              className='block text-xl font-semibold text-white'
               onClick={() => setMobileMenuOpen(false)}
             >
               About

@@ -1,5 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { prisma } from '@/lib/db';
+import { connectDB } from '@/lib/db';
+import { Order } from '@/lib/models/Order';
+import { Product } from '@/lib/models/Product';
 import { auth } from '@clerk/nextjs/server';
 import { rateLimit, getClientIP } from '@/lib/rate-limit';
 import fs from 'fs';
@@ -9,9 +11,8 @@ export async function GET(
   req: NextRequest,
   { params }: { params: Promise<{ productId: string }> }
 ) {
-  // 1. Rate limiting
   const clientIP = getClientIP(req);
-  const rateLimitResult = rateLimit(`download:${clientIP}`, 5, 60000); // 5 downloads per minute
+  const rateLimitResult = rateLimit(`download:${clientIP}`, 5, 60000);
 
   if (!rateLimitResult.success) {
     return new NextResponse('Rate limit exceeded. Please try again later.', {
@@ -23,66 +24,41 @@ export async function GET(
     });
   }
 
-  // 2. Check Authentication
   const { userId } = await auth();
   const { productId } = await params;
 
-  if (!userId) {
-    return new NextResponse('Unauthorized', { status: 401 });
-  }
+  if (!userId) return new NextResponse('Unauthorized', { status: 401 });
 
-  // 3. Check if the user actually bought this product
-  const purchase = await prisma.order.findFirst({
-    where: {
-      userId: userId,
-      isPaid: true, // Ensure payment was completed
-      items: {
-        some: {
-          productId: productId,
-        },
-      },
-    },
-  });
+  await connectDB();
 
-  // Allow download if purchased OR if the user is the Admin
+  const purchase = await Order.findOne({
+    userId,
+    isPaid: true,
+    'items.productId': productId,
+  }).lean();
+
   const isAdmin = userId === process.env.ADMIN_USER_ID;
 
   if (!purchase && !isAdmin) {
     return new NextResponse("Forbidden: You haven't purchased this product.", { status: 403 });
   }
 
-  // 4. Get Product Details
-  const product = await prisma.product.findUnique({
-    where: { id: productId },
-  });
-
+  const product = await Product.findById(productId).lean();
   if (!product || !product.filePath || !product.isActive) {
     return new NextResponse('Product file not found', { status: 404 });
   }
 
-  // 5. Create download verification record (for tracking)
-  await prisma.downloadVerification.create({
-    data: {
-      productId: productId,
-      expiresAt: new Date(Date.now() + 24 * 60 * 60 * 1000), // 24 hours
-    },
-  });
-
-  // 6. Locate the Real File on the Server
   const filePath = path.join(process.cwd(), product.filePath);
 
   try {
-    // Check if file exists
     if (!fs.existsSync(filePath)) {
       return new NextResponse('File not found on server', { status: 404 });
     }
 
-    // 7. Read the file
     const fileBuffer = fs.readFileSync(filePath);
     const fileSize = fs.statSync(filePath).size;
     const fileName = path.basename(product.filePath);
 
-    // 8. Serve the file to the browser
     return new NextResponse(fileBuffer, {
       headers: {
         'Content-Disposition': `attachment; filename="${fileName}"`,

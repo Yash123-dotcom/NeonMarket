@@ -1,6 +1,7 @@
 "use server";
 
-import { prisma } from "@/lib/db";
+import { connectDB } from "@/lib/db";
+import { Coupon } from "@/lib/models/Coupon";
 import { auth } from "@clerk/nextjs/server";
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
@@ -21,32 +22,22 @@ export async function createCoupon(formData: FormData) {
 
   const validatedData = couponSchema.parse(rawData);
 
-  // Check if code exists globally (since codes must be unique in Stripe checkout logic typically)
-  const existing = await prisma.coupon.findUnique({
-    where: { code: validatedData.code },
-  });
+  await connectDB();
 
-  if (existing) {
-    throw new Error("Coupon code already exists");
-  }
+  const existing = await Coupon.findOne({ code: validatedData.code }).lean();
+  if (existing) throw new Error("Coupon code already exists");
 
-  await prisma.coupon.create({
-    data: {
-      ...validatedData,
-      userId,
-    },
-  });
+  await Coupon.create({ ...validatedData, userId });
 
   revalidatePath("/dashboard/coupons");
 }
 
 export async function deleteCoupon(couponId: string) {
-    const { userId } = await auth();
-    if (!userId) throw new Error("Unauthorized");
-  
-    await prisma.coupon.delete({
-      where: { id: couponId, userId }, // Ensure ownership
-    });
-  
-    revalidatePath("/dashboard/coupons");
+  const { userId } = await auth();
+  if (!userId) throw new Error("Unauthorized");
+
+  await connectDB();
+  await Coupon.findOneAndDelete({ _id: couponId, userId });
+
+  revalidatePath("/dashboard/coupons");
 }

@@ -4,67 +4,67 @@
 
 @layer base {
   :root {
-    /* Apple Design System (Light Mode Default) */
-    --background: 0 0% 100%; /* Pure White for pages */
-    --foreground: 240 4% 12%; /* #1d1d1f - Apple's text black */
+    /* Pure Black / Obsidian Theme */
+    --background: 240 10% 4%; /* Very deep zinc/obsidian */
+    --foreground: 0 0% 98%;
 
-    --card: 0 0% 100%;
-    --card-foreground: 240 4% 12%;
+    --card: 240 10% 6%;
+    --card-foreground: 0 0% 98%;
 
-    --popover: 0 0% 100%;
-    --popover-foreground: 240 4% 12%;
+    --popover: 240 10% 6%;
+    --popover-foreground: 0 0% 98%;
 
-    --primary: 211 100% 50%; /* #007aff - Apple System Blue */
+    --primary: 217 91% 60%; /* Cyan/Blue neon glow */
     --primary-foreground: 0 0% 100%;
 
-    --secondary: 240 5% 96%; /* #f5f5f7 - Light gray grouping background */
-    --secondary-foreground: 240 4% 12%;
+    --secondary: 240 10% 10%;
+    --secondary-foreground: 0 0% 98%;
 
-    --muted: 240 5% 96%;
-    --muted-foreground: 240 4% 50%; /* #86868b - Secondary text */
-
-    --accent: 211 100% 50%; 
-    --accent-foreground: 0 0% 100%;
-
-    --destructive: 0 84% 60%;
-    --destructive-foreground: 0 0% 100%;
-
-    --border: 240 6% 90%;
-    --input: 240 6% 90%;
-    --ring: 211 100% 50%;
-
-    --radius: 0.75rem; /* 12px default radius */
-  }
-
-  .dark {
-    /* Apple Dark Mode */
-    --background: 0 0% 0%; /* Pure Black */
-    --foreground: 0 0% 96%; /* #f5f5f7 */
-
-    --card: 240 4% 10%; /* Very dark gray for cards */
-    --card-foreground: 0 0% 96%;
-
-    --popover: 240 4% 10%;
-    --popover-foreground: 0 0% 96%;
-
-    --primary: 211 100% 50%; /* Same blue, or slightly lighter */
-    --primary-foreground: 0 0% 100%;
-
-    --secondary: 240 4% 16%; /* Dark gray secondary */
-    --secondary-foreground: 0 0% 96%;
-
-    --muted: 240 4% 16%;
+    --muted: 240 10% 10%;
     --muted-foreground: 240 5% 64%;
 
-    --accent: 211 100% 50%;
+    --accent: 217 91% 60%;
     --accent-foreground: 0 0% 100%;
 
     --destructive: 0 62% 30%;
-    --destructive-foreground: 0 0% 96%;
+    --destructive-foreground: 0 0% 98%;
 
-    --border: 240 4% 16%;
-    --input: 240 4% 16%;
-    --ring: 211 100% 50%;
+    --border: 240 10% 16%;
+    --input: 240 10% 16%;
+    --ring: 217 91% 60%;
+
+    --radius: 1rem;
+  }
+
+  .dark {
+    /* Same as root because we enforce dark mode for premium look */
+    --background: 240 10% 4%;
+    --foreground: 0 0% 98%;
+
+    --card: 240 10% 6%;
+    --card-foreground: 0 0% 98%;
+
+    --popover: 240 10% 6%;
+    --popover-foreground: 0 0% 98%;
+
+    --primary: 217 91% 60%;
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 240 10% 10%;
+    --secondary-foreground: 0 0% 98%;
+
+    --muted: 240 10% 10%;
+    --muted-foreground: 240 5% 64%;
+
+    --accent: 217 91% 60%;
+    --accent-foreground: 0 0% 100%;
+
+    --destructive: 0 62% 30%;
+    --destructive-foreground: 0 0% 98%;
+
+    --border: 240 10% 16%;
+    --input: 240 10% 16%;
+    --ring: 217 91% 60%;
   }
 }
 
@@ -73,7 +73,10 @@
     @apply border-border;
   }
   body {
-    @apply bg-background text-foreground antialiased selection:bg-blue-100 selection:text-blue-900 dark:selection:bg-blue-900 dark:selection:text-blue-100;
+    @apply bg-background text-foreground antialiased selection:bg-blue-500/30 selection:text-blue-200;
+  }
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-outfit), sans-serif;
   }
 }
 
@@ -83,21 +86,35 @@
   background: transparent;
 }
 
-/* Premium Apple-style Utilities */
 @layer utilities {
   .glass-premium {
-    @apply bg-white/70 dark:bg-black/70 backdrop-blur-xl border border-white/20 dark:border-white/10 shadow-sm;
+    @apply bg-black/40 backdrop-blur-2xl border border-white/10 shadow-lg;
+  }
+  
+  .glass-card-hover {
+    @apply transition-all duration-500 hover:bg-black/60 hover:border-white/20 hover:shadow-[0_8px_30px_rgb(0,0,0,0.12)];
+  }
+
+  .neon-glow {
+    box-shadow: 0 0 20px rgba(59, 130, 246, 0.5), 0 0 40px rgba(59, 130, 246, 0.3);
+  }
+
+  .text-gradient {
+    @apply bg-clip-text text-transparent bg-gradient-to-br from-white via-zinc-200 to-zinc-500;
+  }
+
+  .text-gradient-primary {
+    @apply bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-cyan-400;
   }
 
   .shadow-apple {
-    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.5), 0 2px 4px -1px rgba(0, 0, 0, 0.3);
   }
   
   .shadow-apple-hover {
-    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.08), 0 4px 6px -2px rgba(0, 0, 0, 0.04);
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.8), 0 4px 6px -2px rgba(0, 0, 0, 0.4);
   }
 
-  /* Typography utilities */
   .text-balance {
     text-wrap: balance;
   }

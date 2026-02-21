@@ -1,13 +1,17 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google"; // Clean, Apple-like sans-serif
+import { Inter, Outfit } from "next/font/google";
 import "./globals.css";
 import { ClerkProvider } from "@clerk/nextjs";
 import { Toaster } from "sonner";
 
-// Main font (Apple style substitute)
 const inter = Inter({ 
   subsets: ["latin"],
   variable: "--font-inter", 
+});
+
+const outfit = Outfit({
+  subsets: ["latin"],
+  variable: "--font-outfit",
 });
 
 export const metadata: Metadata = {
@@ -22,8 +26,8 @@ export default function RootLayout({
 }>) {
   return (
     <ClerkProvider>
-      <html lang="en">
-        <body className={`${inter.variable} font-sans antialiased`}>
+      <html lang="en" className="dark">
+        <body className={`${inter.variable} ${outfit.variable} font-sans antialiased`}>
           {children}
           <Toaster position="bottom-right" theme="system" richColors />
         </body>

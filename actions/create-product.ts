@@ -1,6 +1,7 @@
 "use server";
 
-import { prisma } from "@/lib/db";
+import { connectDB } from "@/lib/db";
+import { Product } from "@/lib/models/Product";
 import { auth } from "@clerk/nextjs/server";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
@@ -9,7 +10,7 @@ import { z } from "zod";
 const productSchema = z.object({
   name: z.string().min(3),
   description: z.string().min(10),
-  price: z.coerce.number().min(1), // Price in cents
+  price: z.coerce.number().min(1),
   imagePath: z.string().url(),
   filePath: z.string().url(),
 });
@@ -27,17 +28,16 @@ export async function createProduct(formData: FormData) {
   };
 
   const validatedData = productSchema.parse(rawData);
-
-  // Price is input as dollars, convert to cents
   const priceInCents = Math.round(validatedData.price * 100);
 
-  await prisma.product.create({
-    data: {
-      ...validatedData,
-      price: priceInCents,
-      userId,
-      isActive: true, // Default to active
-    },
+  await connectDB();
+
+  await Product.create({
+    ...validatedData,
+    price: priceInCents,
+    userId,
+    isActive: true,
+    stock: 999,
   });
 
   revalidatePath("/products");

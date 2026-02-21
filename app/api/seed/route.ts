@@ -1,5 +1,8 @@
 import { NextResponse } from 'next/server';
-import { prisma } from '@/lib/db';
+import { connectDB } from '@/lib/db';
+import { User } from '@/lib/models/User';
+import { Product } from '@/lib/models/Product';
+
 
 // A unique ID for our seeder/admin user
 const SEEDER_USER_ID = 'user_admin_seeder_007';
@@ -246,25 +249,20 @@ export async function GET() {
       return new NextResponse('Seeder disabled in production', { status: 403 });
     }
 
+    await connectDB();
+
     // Upsert the admin/seeder user.
-    const user = await prisma.user.upsert({
-      where: { id: SEEDER_USER_ID },
-      update: {},
-      create: {
-        id: SEEDER_USER_ID,
-        email: 'admin@neonmarket.io',
-        name: 'NeonMarket Admin',
-        isSeller: true,
-      },
-    });
+    const user = await User.findByIdAndUpdate(
+      SEEDER_USER_ID,
+      { _id: SEEDER_USER_ID, email: 'admin@neonmarket.io', name: 'NeonMarket Admin', isSeller: true },
+      { upsert: true, new: true }
+    );
 
-    // To ensure a clean seed, we'll delete any existing products from this seeder user.
-    await prisma.product.deleteMany({ where: { userId: user.id } });
+    // Clean existing seeder products
+    await Product.deleteMany({ userId: user._id });
 
-    // Create the new products
-    await prisma.product.createMany({
-      data: sampleProducts.map((product) => ({ ...product, userId: user.id })),
-    });
+    // Insert new products
+    await Product.insertMany(sampleProducts.map((product) => ({ ...product, userId: user._id })));
 
     return NextResponse.json({
       message: 'Database seeded successfully with enhanced product catalog!',

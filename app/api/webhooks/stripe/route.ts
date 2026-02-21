@@ -1,7 +1,11 @@
 import { headers } from 'next/headers';
 import { NextRequest, NextResponse } from 'next/server';
 import { stripe } from '@/lib/stripe';
-import { prisma } from '@/lib/db';
+import { connectDB } from '@/lib/db';
+import { Order } from '@/lib/models/Order';
+import { Product } from '@/lib/models/Product';
+import { Notification } from '@/lib/models/Notification';
+import { Analytics } from '@/lib/models/Analytics';
 import Stripe from 'stripe';
 
 export async function POST(req: NextRequest) {
@@ -26,127 +30,85 @@ export async function POST(req: NextRequest) {
       case 'checkout.session.completed': {
         const session = event.data.object as Stripe.Checkout.Session;
 
-        // Prevent duplicate orders
-        const existingOrder = await prisma.order.findUnique({
-          where: { stripePaymentIntentId: session.payment_intent as string },
-        });
+        await connectDB();
+
+        // Idempotency check
+        const existingOrder = await Order.findOne({
+          stripePaymentIntentId: session.payment_intent as string,
+        }).lean();
 
         if (existingOrder) {
-          console.log('Order already exists:', existingOrder.id);
+          console.log('Order already exists:', (existingOrder as any)._id);
           break;
         }
 
-        // Get product IDs from metadata
         const productIdsString = session.metadata?.productIds;
-        if (!productIdsString) {
-          console.error('No product IDs in session metadata');
-          break;
-        }
+        if (!productIdsString) { console.error('No product IDs in session metadata'); break; }
 
-        const productIds = JSON.parse(productIdsString);
+        const productIds: string[] = JSON.parse(productIdsString);
         const userId = session.metadata?.userId;
+        if (!userId) { console.error('No user ID in session metadata'); break; }
 
-        if (!userId) {
-          console.error('No user ID in session metadata');
-          break;
+        const products = await Product.find({ _id: { $in: productIds } }).lean();
+        const licenseTierId = session.metadata?.licenseTierId || undefined;
+
+        // Buyer notification
+        await Notification.create({
+          userId,
+          title: 'Order Confirmed!',
+          message: `Your purchase of ${products.length} item(s) was successful.`,
+          type: 'PURCHASE',
+          link: '/dashboard',
+        });
+
+        // Seller analytics + notifications
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+
+        const sellerIds = [...new Set(products.map((p) => p.userId))];
+
+        for (const sellerId of sellerIds) {
+          const sellerProducts = products.filter((p) => p.userId === sellerId);
+          const sellerRevenue = sellerProducts.reduce((acc, p) => acc + p.price, 0);
+
+          await Notification.create({
+            userId: sellerId,
+            title: 'Cha-ching! New Sale',
+            message: 'You just sold digital assets. Check your dashboard.',
+            type: 'SALE',
+            link: '/dashboard',
+          });
+
+          // Upsert analytics record
+          await Analytics.findOneAndUpdate(
+            { date: today, userId: sellerId },
+            { $inc: { revenue: sellerRevenue, sales: sellerProducts.length } },
+            { upsert: true, new: true }
+          );
         }
 
-        // Get products to update stock
-        const products = await prisma.product.findMany({
-          where: { id: { in: productIds } },
+        // Create the order
+        const order = await Order.create({
+          userId,
+          pricePaidInCents: session.amount_total || 0,
+          stripePaymentIntentId: session.payment_intent as string,
+          isPaid: true,
+          items: products.map((product) => ({
+            productId: product._id.toString(),
+            quantity: 1,
+            price: product.price,
+            licenseTierId,
+          })),
         });
 
-        // ---------------------------------------------------------
-        // ATOMIC TRANSACTION START
-        // ---------------------------------------------------------
-        await prisma.$transaction(async (tx: any) => {
-          // 1. Create "Purchase Successful" Notification for Buyer
-          await tx.notification.create({
-            data: {
-              userId,
-              title: "Order Confirmed!",
-              message: `Your purchase of ${products.length} items was successful.`,
-              type: "PURCHASE",
-              link: "/dashboard",
-            },
+        // Decrement stock
+        for (const product of products) {
+          await Product.findByIdAndUpdate(product._id, {
+            $inc: { stock: -1 },
           });
+        }
 
-          // 2. Process improvements for Sellers: Analytics & Notifications
-          const today = new Date();
-          today.setHours(0, 0, 0, 0);
-
-          const licenseTierId = session.metadata?.licenseTierId;
-
-          const sellerIds = Array.from(new Set(products.map((p) => p.userId)));
-          
-          for (const sellerId of sellerIds) {
-             const sellerProducts = products.filter(p => p.userId === sellerId);
-             const sellerRevenue = sellerProducts.reduce((acc, p) => acc + p.price, 0); 
-
-            // Notify Seller
-            await tx.notification.create({
-              data: {
-                userId: sellerId,
-                title: "Cha-ching! New Sale",
-                message: "You just sold digital assets. Check your dashboard.",
-                type: "SALE",
-                link: "/dashboard",
-              },
-            });
-
-            // Update Analytics (Upsert Daily Record)
-            await tx.analytics.upsert({
-                where: {
-                    date_userId: {
-                        date: today,
-                        userId: sellerId
-                    }
-                },
-                update: {
-                    revenue: { increment: sellerRevenue },
-                    sales: { increment: sellerProducts.length }
-                },
-                create: {
-                    date: today,
-                    userId: sellerId,
-                    revenue: sellerRevenue,
-                    sales: sellerProducts.length
-                }
-            });
-          }
-
-           // 3. Create the order
-          const order = await tx.order.create({
-            data: {
-              userId,
-              pricePaidInCents: session.amount_total || 0,
-              stripePaymentIntentId: session.payment_intent as string,
-              isPaid: true,
-              items: {
-                create: products.map((product) => ({
-                  productId: product.id,
-                  quantity: 1,
-                  price: product.price, 
-                  licenseTierId: licenseTierId || undefined,
-                })),
-              },
-            },
-          });
-
-          // 4. Update stock for each product
-          for (const product of products) {
-            await tx.product.update({
-              where: { id: product.id },
-              data: { stock: Math.max(0, product.stock - 1) },
-            });
-          }
-
-          console.log('Order created successfully:', order.id);
-        });
-        // ---------------------------------------------------------
-        // ATOMIC TRANSACTION END
-        // ---------------------------------------------------------
-
+        console.log('Order created:', order._id);
         break;
       }
 

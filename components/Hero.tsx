@@ -4,6 +4,7 @@ import { motion, useScroll, useTransform } from "framer-motion";
 import { useRef } from "react";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
+import { NeonButton } from "./NeonButton";
 
 export function Hero() {
   const ref = useRef(null);
@@ -16,10 +17,10 @@ export function Hero() {
   const opacity = useTransform(scrollYProgress, [0, 0.4], [1, 0]);
 
   return (
-    <div ref={ref} className="relative min-h-[90vh] flex items-center justify-center overflow-hidden bg-white dark:bg-black pt-20">
+    <div ref={ref} className="relative min-h-[90vh] flex items-center justify-center overflow-hidden bg-background pt-20">
       
       {/* Dynamic Background Light (Subtle) */}
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_0%,rgba(0,122,255,0.08),rgba(255,255,255,0)_50%)] dark:bg-[radial-gradient(circle_at_50%_0%,rgba(0,122,255,0.15),rgba(0,0,0,0)_60%)] pointer-events-none" />
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_0%,rgba(59,130,246,0.15),rgba(0,0,0,0)_70%)] pointer-events-none" />
       
       <div className="relative z-10 px-6 max-w-[1400px] mx-auto w-full">
         <motion.div 
@@ -47,12 +48,11 @@ export function Hero() {
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.1, duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-            className="text-7xl md:text-8xl lg:text-9xl font-[600] tracking-tight mb-8 text-black dark:text-white"
-            style={{ letterSpacing: '-0.03em', lineHeight: 0.95 }}
+            className="text-7xl md:text-8xl lg:text-9xl font-bold tracking-[-0.03em] leading-[0.95] mb-8 text-white"
           >
-            Creativity.
+            Digital Assets.
             <br />
-            <span className="text-zinc-400 dark:text-zinc-600">Unleashed.</span>
+            <span className="text-gradient-primary">Redefined.</span>
           </motion.h1>
           
           <motion.p 
@@ -66,26 +66,24 @@ export function Hero() {
             Curated by experts. Designed for you.
           </motion.p>
 
-          {/* Buttons */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.3, duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-            className="flex flex-col sm:flex-row gap-4 items-center"
+            className="flex flex-col sm:flex-row gap-6 items-center"
           >
-            <Link 
-              href="/products" 
-              className="px-8 py-4 bg-[#0071E3] hover:bg-[#0077ED] text-white rounded-full font-medium text-[17px] transition-all hover:scale-[1.02] active:scale-[0.98] shadow-lg shadow-blue-500/25"
-            >
-              Browse Products
+            <Link href="/products">
+              <NeonButton>
+                Browse Products
+              </NeonButton>
             </Link>
             
             <Link 
               href="/sell" 
-              className="group flex items-center gap-2 px-8 py-4 text-[17px] font-medium text-[#06c] hover:text-[#0071E3] transition-colors"
+              className="group flex items-center gap-2 px-8 py-4 text-[17px] font-medium text-zinc-300 hover:text-white transition-colors"
             >
               <span>Selling on NeonMarket</span>
-              <ArrowRight className="w-4 h-4 group-hover:translate-x-0.5 transition-transform" />
+              <ArrowRight className="w-4 h-4 group-hover:translate-x-0.5 transition-transform text-blue-400" />
             </Link>
           </motion.div>
         </motion.div>

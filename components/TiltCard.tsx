@@ -51,17 +51,11 @@ export const TiltCard = ({ children }: { children: React.ReactNode }) => {
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
       style={{
-        transformStyle: "preserve-3d",
         transform,
       }}
-      className="relative"
+      className="relative [transform-style:preserve-3d]"
     >
-      <div
-        style={{
-          transform: "translateZ(75px)",
-          transformStyle: "preserve-3d",
-        }}
-      >
+      <div className="[transform:translateZ(75px)] [transform-style:preserve-3d]">
           {children}
       </div>
     </motion.div>

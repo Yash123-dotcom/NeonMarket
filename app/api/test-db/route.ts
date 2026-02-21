@@ -1,32 +1,23 @@
 import { NextResponse } from 'next/server';
-import { prisma } from '@/lib/db';
+import { connectDB } from '@/lib/db';
+import { User } from '@/lib/models/User';
+import { Product } from '@/lib/models/Product';
 
 export async function GET() {
   try {
-    // Test database connection
-    await prisma.$connect();
-
-    // Try a simple query
-    const userCount = await prisma.user.count();
-    const productCount = await prisma.product.count();
-
+    await connectDB();
+    const userCount = await User.countDocuments();
+    const productCount = await Product.countDocuments();
     return NextResponse.json({
-      status: 'Database connected successfully!',
+      status: 'MongoDB connected ✅',
       users: userCount,
       products: productCount,
       timestamp: new Date().toISOString(),
     });
   } catch (error) {
-    console.error('Database connection error:', error);
     return NextResponse.json(
-      {
-        status: 'Database connection failed',
-        error: error instanceof Error ? error.message : 'Unknown error',
-        timestamp: new Date().toISOString(),
-      },
+      { status: 'DB connection failed ❌', error: String(error) },
       { status: 500 }
     );
-  } finally {
-    await prisma.$disconnect();
   }
 }
