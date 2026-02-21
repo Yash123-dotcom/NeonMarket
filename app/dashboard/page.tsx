@@ -41,8 +41,9 @@ export default async function DashboardPage() {
     })),
   }));
 
+  const isSeller = user?.isSeller || !!user?.stripeConnectAccountId;
   let analyticsData = null;
-  if (user?.isSeller || user?.stripeConnectAccountId) {
+  if (isSeller) {
     analyticsData = await getDashboardAnalytics(userId);
   }
 
@@ -67,6 +68,15 @@ export default async function DashboardPage() {
                 </Link>
                 <ManagePayouts />
               </div>
+            ) : isSeller ? (
+              <div className="flex gap-4">
+                <Link href="/dashboard/products" className="bg-zinc-900 text-white font-bold px-5 py-2 rounded-lg hover:bg-zinc-800 transition border border-white/10">
+                  My Products
+                </Link>
+                <Link href="/sell" className="bg-yellow-500/20 text-yellow-400 font-bold px-5 py-2 rounded-lg hover:bg-yellow-500/30 transition border border-yellow-500/20">
+                  Complete Payout Setup
+                </Link>
+              </div>
             ) : (
               <Link href="/sell" className="bg-white text-black font-bold px-6 py-3 rounded-full hover:bg-gray-200 transition">
                 Become a Seller
@@ -74,8 +84,17 @@ export default async function DashboardPage() {
             )}
           </div>
 
-          {user?.stripeConnectAccountId && analyticsData ? (
+          {isSeller && analyticsData ? (
             <div className="space-y-6">
+              {!user?.stripeConnectAccountId && (
+                <div className="bg-yellow-500/10 border border-yellow-500/30 text-yellow-300 rounded-2xl p-4 flex items-center gap-3">
+                  <span className="text-lg">⚠️</span>
+                  <div>
+                    <p className="font-bold">Payout setup incomplete</p>
+                    <p className="text-sm text-yellow-400/70">Your products are live, but you need to connect a bank account to receive payments. <Link href="/sell" className="underline font-bold">Complete setup →</Link></p>
+                  </div>
+                </div>
+              )}
               <BentoGrid totalRevenue={analyticsData.totalRevenue} totalSales={analyticsData.totalSales} totalViews={analyticsData.totalViews} />
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-7 gap-6">
                 <RevenueChart data={analyticsData.chartData} />

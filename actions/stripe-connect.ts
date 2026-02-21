@@ -44,7 +44,11 @@ export async function createSellerAccount() {
 
     accountId = account.id;
 
-    await User.findByIdAndUpdate(user.id, { stripeConnectAccountId: accountId });
+    // Mark user as seller and save Stripe account ID
+    await User.findByIdAndUpdate(user.id, { stripeConnectAccountId: accountId, isSeller: true });
+  } else {
+    // Ensure isSeller is true even if they had an account before
+    await User.findByIdAndUpdate(user.id, { isSeller: true });
   }
 
   const accountLink = await stripe.accountLinks.create({
