@@ -122,7 +122,7 @@ export function ReviewsList({ reviews }: ReviewsListProps) {
                 </div>
                 <StarRow rating={review.rating} />
                 <p className="mt-3 text-[14px] text-zinc-300 leading-relaxed">
-                  "{review.comment}"
+                  &quot;{review.comment}&quot;
                 </p>
               </div>
             </div>

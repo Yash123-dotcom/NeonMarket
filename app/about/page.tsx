@@ -52,7 +52,7 @@ export default function AboutPage() {
                 <Sparkles className="w-6 h-6 text-pink-400" />
               </div>
               <h3 className="text-2xl font-bold mb-4">Quality First</h3>
-              <p className="text-zinc-400">Every asset on NeonMarket goes through a rigorous curation process to ensure you're only getting the absolute best tools for your next project.</p>
+              <p className="text-zinc-400">Every asset on NeonMarket goes through a rigorous curation process to ensure you&apos;re only getting the absolute best tools for your next project.</p>
             </div>
             
             <div className="bg-white/5 border border-white/10 p-8 rounded-3xl">
@@ -60,7 +60,7 @@ export default function AboutPage() {
                 <Users className="w-6 h-6 text-cyan-400" />
               </div>
               <h3 className="text-2xl font-bold mb-4">Creator Centric</h3>
-              <p className="text-zinc-400">We believe creators should keep what they earn. That's why we offer industry-leading payout splits and instant transfers directly to your bank.</p>
+              <p className="text-zinc-400">We believe creators should keep what they earn. That&apos;s why we offer industry-leading payout splits and instant transfers directly to your bank.</p>
             </div>
 
             <div className="bg-white/5 border border-white/10 p-8 rounded-3xl">

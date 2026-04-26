@@ -23,7 +23,7 @@ export default function TermsPage() {
           <p>Sellers must own the rights to the content they upload. NeonMarket reserves the right to remove content that violates copyright laws or our community guidelines. Sellers receive 85% of the sale price, with 15% retained as a platform fee.</p>
 
           <h3>5. Limitation of Liability</h3>
-          <p>NeonMarket is provided "as is" without warranties of any kind. We are not liable for any damages arising from your use of the platform.</p>
+          <p>NeonMarket is provided &quot;as is&quot; without warranties of any kind. We are not liable for any damages arising from your use of the platform.</p>
         </div>
       </div>
       <Footer />

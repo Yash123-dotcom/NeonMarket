@@ -61,7 +61,7 @@ export function Hero() {
             transition={{ delay: 0.2, duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
             className="text-xl md:text-2xl text-zinc-600 dark:text-zinc-400 max-w-2xl mx-auto mb-12 leading-relaxed font-normal"
           >
-            The world's most premium marketplace for digital assets.
+            The world&apos;s most premium marketplace for digital assets.
             <br className="hidden md:block" />
             Curated by experts. Designed for you.
           </motion.p>
