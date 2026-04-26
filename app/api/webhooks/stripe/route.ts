@@ -79,20 +79,34 @@ export async function POST(req: NextRequest) {
             link: '/dashboard',
           });
 
-          // Upsert analytics record
+          // Upsert analytics record with per-product breakdown
           await Analytics.findOneAndUpdate(
             { date: today, userId: sellerId },
-            { $inc: { revenue: sellerRevenue, sales: sellerProducts.length } },
+            {
+              $inc: { revenue: sellerRevenue, sales: sellerProducts.length },
+              $push: {
+                productBreakdown: {
+                  $each: sellerProducts.map((p) => ({
+                    productId: p._id.toString(),
+                    revenue: p.price,
+                    sales: 1,
+                  })),
+                },
+              },
+            },
             { upsert: true, new: true }
           );
         }
 
         // Create the order
+        const couponCode = session.metadata?.couponCode || undefined;
         const order = await Order.create({
           userId,
+          status: 'paid',
           pricePaidInCents: session.amount_total || 0,
           stripePaymentIntentId: session.payment_intent as string,
           isPaid: true,
+          couponCode,
           items: products.map((product) => ({
             productId: product._id.toString(),
             quantity: 1,
@@ -101,10 +115,10 @@ export async function POST(req: NextRequest) {
           })),
         });
 
-        // Decrement stock
+        // Decrement stock and increment downloadCount
         for (const product of products) {
           await Product.findByIdAndUpdate(product._id, {
-            $inc: { stock: -1 },
+            $inc: { stock: -1, downloadCount: 1 },
           });
         }
 

@@ -35,8 +35,8 @@ export async function connectDB() {
     throw e;
   }
 
+  // Pre-register all models so their indexes are created on first connection.
+  await import('@/lib/models');
+
   return cached.conn;
 }
-
-/** Legacy alias so existing imports of `prisma` don't break everything at once. */
-export const prisma = null;
