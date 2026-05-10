@@ -4,6 +4,8 @@ import { SignIn } from '@clerk/nextjs';
 import Link from 'next/link';
 import { ShieldCheck, Zap, Star, ArrowLeft, Package, Users, TrendingUp } from 'lucide-react';
 
+import { Typewriter } from '@/components/Typewriter';
+
 const STATS = [
   { value: '12K+', label: 'Assets Available', icon: Package },
   { value: '8.4K', label: 'Happy Creators', icon: Users },
@@ -62,10 +64,10 @@ export default function SignInPage() {
               <span className='text-white font-bold text-lg tracking-tight'>NeonMarket</span>
             </div>
 
-            <h2 className='text-4xl xl:text-5xl font-bold text-white leading-[1.1] tracking-tight mb-4'>
+            <h2 className='text-4xl xl:text-5xl font-bold text-white leading-[1.1] tracking-tight mb-4 h-[100px] xl:h-[120px]'>
               The premium<br />
               <span className='text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-cyan-400'>
-                digital marketplace.
+                <Typewriter words={['digital marketplace.', 'creator ecosystem.', 'asset library.']} delay={2000} />
               </span>
             </h2>
             <p className='text-zinc-400 text-base leading-relaxed max-w-sm'>

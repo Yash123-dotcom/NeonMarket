@@ -6,6 +6,8 @@ import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import { NeonButton } from "./NeonButton";
 
+import { Typewriter } from "./Typewriter";
+
 export function Hero() {
   const ref = useRef(null);
   const { scrollYProgress } = useScroll({
@@ -48,11 +50,13 @@ export function Hero() {
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.1, duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-            className="text-7xl md:text-8xl lg:text-9xl font-bold tracking-[-0.03em] leading-[0.95] mb-8 text-white"
+            className="text-7xl md:text-8xl lg:text-9xl font-bold tracking-[-0.03em] leading-[0.95] mb-8 text-white h-[160px] sm:h-[180px] md:h-[220px]"
           >
             Digital Assets.
             <br />
-            <span className="text-gradient-primary">Redefined.</span>
+            <span className="text-gradient-primary">
+              <Typewriter words={["Redefined.", "Elevated.", "Perfected.", "Unleashed."]} />
+            </span>
           </motion.h1>
           
           <motion.p 

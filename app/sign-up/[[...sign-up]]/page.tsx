@@ -4,6 +4,7 @@ import { SignUp } from '@clerk/nextjs';
 import Link from 'next/link';
 import { ShieldCheck, Download, Package, ArrowLeft, Sparkles, Users, Star } from 'lucide-react';
 
+import { Typewriter } from '@/components/Typewriter';
 const PERKS = [
   {
     icon: Download,
@@ -72,10 +73,10 @@ export default function SignUpPage() {
               <span className='text-white font-bold text-lg tracking-tight'>NeonMarket</span>
             </div>
 
-            <h2 className='text-4xl xl:text-5xl font-bold text-white leading-[1.1] tracking-tight mb-4'>
+            <h2 className='text-4xl xl:text-5xl font-bold text-white leading-[1.1] tracking-tight mb-4 h-[100px] xl:h-[120px]'>
               Start building<br />
               <span className='text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 to-blue-400'>
-                something great.
+                <Typewriter words={['something great.', 'your next idea.', 'the future.']} delay={2000} />
               </span>
             </h2>
             <p className='text-zinc-400 text-base leading-relaxed max-w-sm'>
