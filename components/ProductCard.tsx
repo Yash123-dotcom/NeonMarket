@@ -37,19 +37,19 @@ export function ProductCard({ product, index }: ProductCardProps) {
       className="group"
     >
       <Link href={`/product/${productId}`} className="block">
-        <div className="relative flex flex-col bg-zinc-900 border border-white/[0.06] rounded-2xl overflow-hidden transition-all duration-300 hover:border-white/[0.14] hover:shadow-xl hover:shadow-black/40 hover:-translate-y-1">
+        <div className="relative flex flex-col bg-zinc-900 border border-white/[0.06] rounded-2xl overflow-hidden transition-all duration-300 hover:border-white/[0.14] hover:shadow-xl hover:shadow-black/40 hover:-translate-y-1 will-change-transform">
           {/* Image */}
           <div className="relative aspect-[4/3] overflow-hidden bg-zinc-800">
             <img
               src={product.imagePath}
               alt={product.name}
-              className="w-full h-full object-cover transition-transform duration-500 ease-out group-hover:scale-105"
+              className="w-full h-full object-cover transition-transform duration-500 ease-out group-hover:scale-105 will-change-transform"
               loading="lazy"
             />
             {/* Category badge */}
             {product.category && (
               <div className="absolute top-3 left-3">
-                <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-black/60 backdrop-blur-md border border-white/10 text-[11px] font-medium text-zinc-300">
+                <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-black/80 border border-white/10 text-[11px] font-medium text-zinc-300 shadow-sm">
                   <Tag className="w-2.5 h-2.5" />
                   {product.category}
                 </span>
@@ -57,7 +57,7 @@ export function ProductCard({ product, index }: ProductCardProps) {
             )}
             {/* Price badge */}
             <div className="absolute top-3 right-3">
-              <span className="inline-flex items-center px-3 py-1 rounded-full bg-blue-500/90 backdrop-blur-md text-white text-[13px] font-semibold shadow-lg shadow-blue-500/20">
+              <span className="inline-flex items-center px-3 py-1 rounded-full bg-blue-600 text-white text-[13px] font-semibold shadow-lg shadow-blue-500/20">
                 ${(product.price / 100).toFixed(0)}
               </span>
             </div>
