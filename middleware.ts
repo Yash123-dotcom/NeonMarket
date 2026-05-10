@@ -5,6 +5,13 @@ const isPublicRoute = createRouteMatcher([
   '/', // Homepage
   '/products(.*)', // Products pages
   '/product(.*)', // Product pages
+  '/about(.*)', // About page
+  '/support(.*)', // Support page
+  '/categories(.*)', // Categories page
+  '/privacy(.*)', // Privacy policy
+  '/terms(.*)', // Terms of service
+  '/license(.*)', // License
+  '/cart(.*)', // Cart page
   '/api/seed', // Seeder (now secured with auth check)
   '/api/webhooks(.*)', // Stripe & Clerk Webhooks (CRITICAL: External services need access!)
   '/sign-in(.*)',

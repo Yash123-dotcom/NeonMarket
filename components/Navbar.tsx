@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import { useCart } from '@/hooks/use-cart';
 import { ShoppingBag, Menu, X } from 'lucide-react';
-import { UserButton, useUser, SignInButton } from '@clerk/nextjs';
+import { UserButton, useUser } from '@clerk/nextjs';
 import { useState, useEffect } from 'react';
 
 const useHasMounted = () => {
@@ -102,11 +102,12 @@ export default function Navbar() {
               <UserButton afterSignOutUrl='/' />
             </div>
           ) : (
-            <SignInButton mode='modal'>
-              <button className='text-[13px] font-medium text-zinc-300 hover:text-white transition-colors bg-white/5 hover:bg-white/10 px-4 py-2 rounded-full border border-white/10'>
-                Sign in
-              </button>
-            </SignInButton>
+            <Link
+              href='/sign-in'
+              className='text-[13px] font-medium text-zinc-300 hover:text-white transition-colors bg-white/5 hover:bg-white/10 px-4 py-2 rounded-full border border-white/10'
+            >
+              Sign in
+            </Link>
           )}
 
           {/* Mobile Menu Button */}

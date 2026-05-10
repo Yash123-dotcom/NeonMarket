@@ -12,6 +12,7 @@ const sampleProducts = [
   // UI/UX Design Assets
   {
     name: 'Cyberpunk UI Kit',
+    category: 'UI Kits',
     description:
       'A futuristic UI kit with neon elements, perfect for sci-fi games and apps. Includes over 100 components, buttons, forms, and navigation elements.',
     price: 4999, // $49.99
@@ -21,6 +22,7 @@ const sampleProducts = [
   },
   {
     name: 'Minimalist Dashboard Template',
+    category: 'UI Kits',
     description:
       'Clean and modern dashboard template with React components. Perfect for SaaS applications, admin panels, and analytics dashboards.',
     price: 3999, // $39.99
@@ -30,6 +32,7 @@ const sampleProducts = [
   },
   {
     name: 'Mobile App UI Kit - iOS & Android',
+    category: 'UI Kits',
     description:
       'Complete mobile app UI kit with 50+ screens for e-commerce, social media, and productivity apps. Includes Figma and Sketch files.',
     price: 5999, // $59.99
@@ -41,6 +44,7 @@ const sampleProducts = [
   // 3D Models & Assets
   {
     name: 'Sci-Fi Golem 3D Model',
+    category: '3D Models',
     description:
       'High-poly, game-ready 3D model of a rock golem infused with sci-fi technology. Rigged and animated with 15 different animations.',
     price: 7999, // $79.99
@@ -50,6 +54,7 @@ const sampleProducts = [
   },
   {
     name: 'Low Poly Nature Pack',
+    category: '3D Models',
     description:
       'Collection of 200+ low poly nature assets including trees, rocks, plants, and terrain pieces. Perfect for indie games and mobile apps.',
     price: 2999, // $29.99
@@ -59,6 +64,7 @@ const sampleProducts = [
   },
   {
     name: 'Futuristic Vehicle Collection',
+    category: '3D Models',
     description:
       'Set of 12 high-quality futuristic vehicles including hovercars, spaceships, and mechs. Game-ready with PBR textures.',
     price: 8999, // $89.99
@@ -70,6 +76,7 @@ const sampleProducts = [
   // Shaders & VFX
   {
     name: 'Holographic Shader Pack',
+    category: 'Other',
     description:
       'Collection of 20 advanced holographic and glitch effect shaders for Unity and Unreal Engine. Includes documentation and examples.',
     price: 2999, // $29.99
@@ -79,6 +86,7 @@ const sampleProducts = [
   },
   {
     name: 'Data Stream VFX',
+    category: 'Other',
     description:
       'Pack of visual effects for creating digital data streams, matrix-style code rain, and network visualizations. 25 different effects included.',
     price: 2499, // $24.99
@@ -88,6 +96,7 @@ const sampleProducts = [
   },
   {
     name: 'Particle Magic - Fire & Smoke',
+    category: 'Other',
     description:
       'Realistic fire and smoke particle systems for games and animations. Includes 30 different variations and customizable parameters.',
     price: 3499, // $34.99
@@ -99,6 +108,7 @@ const sampleProducts = [
   // Audio Assets
   {
     name: 'Neon City Soundscapes',
+    category: 'Audio',
     description:
       'Atmospheric sound pack with 50 tracks designed for cyberpunk and futuristic settings. Loops and one-shots included with stems.',
     price: 1999, // $19.99
@@ -108,6 +118,7 @@ const sampleProducts = [
   },
   {
     name: 'Epic Orchestral Music Pack',
+    category: 'Audio',
     description:
       '20 epic orchestral tracks perfect for games, trailers, and cinematic projects. Includes full tracks, loops, and individual stems.',
     price: 4999, // $49.99
@@ -117,6 +128,7 @@ const sampleProducts = [
   },
   {
     name: 'Retro Synthwave Collection',
+    category: 'Audio',
     description:
       '80s-inspired synthwave music collection with 15 tracks. Perfect for retro games, vlogs, and nostalgic projects.',
     price: 2999, // $29.99
@@ -128,6 +140,7 @@ const sampleProducts = [
   // Textures & Materials
   {
     name: '80s Retro Asset Pack',
+    category: 'Other',
     description:
       'Vibrant collection of 3D models and textures with a retro 80s theme. Includes palm trees, sunsets, chrome text, and neon materials.',
     price: 3499, // $34.99
@@ -137,6 +150,7 @@ const sampleProducts = [
   },
   {
     name: 'PBR Material Library - Metals',
+    category: 'Other',
     description:
       'Professional PBR material library featuring 100 different metal surfaces. 4K textures with albedo, normal, roughness, and metallic maps.',
     price: 3999, // $39.99
@@ -146,6 +160,7 @@ const sampleProducts = [
   },
   {
     name: 'Seamless Fabric Textures',
+    category: 'Other',
     description:
       'High-resolution seamless fabric textures including cotton, silk, denim, leather, and more. Perfect for fashion and interior design.',
     price: 2499, // $24.99
@@ -157,6 +172,7 @@ const sampleProducts = [
   // Code Templates & Tools
   {
     name: 'React E-commerce Starter',
+    category: 'Templates',
     description:
       'Complete React e-commerce template with Next.js, Stripe integration, and modern design. Includes admin panel and user authentication.',
     price: 6999, // $69.99
@@ -166,6 +182,7 @@ const sampleProducts = [
   },
   {
     name: 'SaaS Landing Page Template',
+    category: 'Templates',
     description:
       'Modern SaaS landing page template with conversion-optimized sections. Built with Tailwind CSS and includes 10 different variations.',
     price: 2999, // $29.99
@@ -175,6 +192,7 @@ const sampleProducts = [
   },
   {
     name: 'Node.js API Boilerplate',
+    category: 'Templates',
     description:
       'Production-ready Node.js API boilerplate with authentication, database integration, testing, and deployment scripts. Saves weeks of setup.',
     price: 4999, // $49.99
@@ -186,6 +204,7 @@ const sampleProducts = [
   // Icons & Graphics
   {
     name: 'Minimalist Icon Pack - 500 Icons',
+    category: 'Icons',
     description:
       'Clean and modern icon pack with 500 icons in multiple formats (SVG, PNG, AI). Perfect for web and mobile applications.',
     price: 1999, // $19.99
@@ -195,6 +214,7 @@ const sampleProducts = [
   },
   {
     name: 'Animated Logo Templates',
+    category: 'Icons',
     description:
       'Collection of 25 animated logo templates for After Effects. Includes tech, creative, and business themes with easy customization.',
     price: 3999, // $39.99
@@ -204,6 +224,7 @@ const sampleProducts = [
   },
   {
     name: 'Social Media Graphics Bundle',
+    category: 'Icons',
     description:
       'Complete social media graphics bundle with 200+ templates for Instagram, Facebook, Twitter, and LinkedIn. Includes PSD and Canva files.',
     price: 2499, // $24.99
@@ -215,6 +236,7 @@ const sampleProducts = [
   // Game Assets
   {
     name: 'Pixel Art Character Pack',
+    category: 'Other',
     description:
       '50 unique pixel art characters with walking, jumping, and attack animations. Perfect for 2D platformer and RPG games.',
     price: 3499, // $34.99
@@ -224,6 +246,7 @@ const sampleProducts = [
   },
   {
     name: 'Dungeon Tileset Collection',
+    category: 'Other',
     description:
       'Complete dungeon tileset for 2D games including walls, floors, decorations, and interactive objects. Includes multiple themes.',
     price: 2999, // $29.99
@@ -233,6 +256,7 @@ const sampleProducts = [
   },
   {
     name: 'Space Shooter Game Kit',
+    category: 'Other',
     description:
       'Complete space shooter game kit with ships, enemies, weapons, and UI elements. Includes Unity project files and documentation.',
     price: 5999, // $59.99
