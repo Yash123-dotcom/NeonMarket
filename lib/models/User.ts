@@ -12,7 +12,7 @@ export type IUser = {
   role: UserRole;
   isSeller: boolean;
   payoutEnabled: boolean;
-  stripeConnectAccountId?: string;
+  razorpayAccountId?: string;
   createdAt?: Date;
   updatedAt?: Date;
 };
@@ -31,7 +31,7 @@ const UserSchema = new Schema<IUser>(
     },
     isSeller: { type: Boolean, default: false },
     payoutEnabled: { type: Boolean, default: false },
-    stripeConnectAccountId: { type: String, unique: true, sparse: true },
+    razorpayAccountId: { type: String, unique: true, sparse: true },
   },
   { timestamps: true }
 );

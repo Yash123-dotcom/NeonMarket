@@ -19,6 +19,15 @@ export async function createProduct(formData: FormData) {
   const { userId } = await auth();
   if (!userId) throw new Error("Unauthorized");
 
+  await connectDB();
+
+  // Security Check: Ensure the user is an active seller with a payout ID setup
+  const { User } = await import("@/lib/models/User");
+  const dbUser = await User.findById(userId).lean();
+  if (!dbUser || !dbUser.isSeller || !dbUser.razorpayAccountId) {
+    throw new Error("Unauthorized: You must set up payouts before creating products.");
+  }
+
   const rawData = {
     name: formData.get("name"),
     description: formData.get("description"),
@@ -29,8 +38,6 @@ export async function createProduct(formData: FormData) {
 
   const validatedData = productSchema.parse(rawData);
   const priceInCents = Math.round(validatedData.price * 100);
-
-  await connectDB();
 
   await Product.create({
     ...validatedData,

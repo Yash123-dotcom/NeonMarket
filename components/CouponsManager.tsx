@@ -5,6 +5,7 @@ import { createCoupon, deleteCoupon } from "@/actions/create-coupon";
 import { useState } from "react";
 import { toast } from "sonner";
 import { Loader2, Ticket, Trash } from "lucide-react";
+import { NeonButton } from "./NeonButton";
 
 // Types (since client component)
 interface Coupon {
@@ -37,47 +38,65 @@ export default function CouponsPage({ coupons }: { coupons: Coupon[] }) {
   }
 
   return (
-    <div className="min-h-screen bg-black text-white pb-20">
+    <div className="min-h-screen bg-background text-white pb-20 relative overflow-hidden">
       <Navbar />
-      <div className="max-w-4xl mx-auto px-6 pt-32">
-        <h1 className="text-4xl font-black mb-8 flex items-center gap-4">
-            <Ticket className="w-10 h-10 text-yellow-400" />
+
+      {/* Dynamic Background Light (Animated Blobs) */}
+      <div className="absolute top-0 -left-40 w-96 h-96 bg-purple-500/10 rounded-full mix-blend-screen filter blur-[100px] opacity-70 animate-blob pointer-events-none" />
+      <div className="absolute top-40 -right-40 w-96 h-96 bg-cyan-500/10 rounded-full mix-blend-screen filter blur-[100px] opacity-70 animate-blob animation-delay-2000 pointer-events-none" />
+
+      <div className="max-w-4xl mx-auto px-6 pt-32 relative z-10">
+        <h1 className="text-4xl font-black mb-8 flex items-center gap-4 tracking-tight leading-none">
+            <Ticket className="w-10 h-10 text-cyan-400" />
             Manage Coupons
         </h1>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
             
             {/* Form */}
-            <div className="bg-gray-900/50 p-8 rounded-3xl border border-gray-800 h-fit">
-                <h3 className="text-xl font-bold mb-6">Create New Coupon</h3>
+            <div className="glass-premium p-8 rounded-3xl h-fit shadow-2xl">
+                <h3 className="text-xl font-bold mb-6 text-white">Create New Coupon</h3>
                 <form action={handleSubmit} className="space-y-6">
                     <div>
-                        <label className="block text-sm font-bold mb-2 text-gray-400">Code (e.g. SUMMER20)</label>
-                        <input name="code" required className="w-full bg-black border border-gray-700 rounded-xl p-4 focus:ring-2 focus:ring-purple-500 outline-none transition uppercase" placeholder="SUMMER20" />
+                        <label className="block text-sm font-semibold mb-2 text-zinc-400">Code (e.g. SUMMER20)</label>
+                        <input 
+                          name="code" 
+                          required 
+                          className="w-full bg-white/5 border border-white/10 text-white placeholder-zinc-600 rounded-xl p-4 focus:border-blue-500/70 focus:ring-2 focus:ring-blue-500/20 outline-none transition uppercase" 
+                          placeholder="SUMMER20" 
+                        />
                     </div>
                     <div>
-                        <label className="block text-sm font-bold mb-2 text-gray-400">Discount Percentage (%)</label>
-                        <input name="percentOff" type="number" min="1" max="100" required className="w-full bg-black border border-gray-700 rounded-xl p-4 focus:ring-2 focus:ring-purple-500 outline-none transition" placeholder="20" />
+                        <label className="block text-sm font-semibold mb-2 text-zinc-400">Discount Percentage (%)</label>
+                        <input 
+                          name="percentOff" 
+                          type="number" 
+                          min="1" 
+                          max="100" 
+                          required 
+                          className="w-full bg-white/5 border border-white/10 text-white placeholder-zinc-600 rounded-xl p-4 focus:border-blue-500/70 focus:ring-2 focus:ring-blue-500/20 outline-none transition" 
+                          placeholder="20" 
+                        />
                     </div>
-                    <button disabled={loading} className="w-full bg-white text-black font-black py-4 rounded-xl hover:bg-gray-200 transition flex justify-center">
-                        {loading ? <Loader2 className="animate-spin" /> : "Create Coupon"}
-                    </button>
+                    <NeonButton disabled={loading} className="w-full py-4 flex justify-center shadow-[0_0_20px_rgba(59,130,246,0.3)]">
+                        {loading ? <Loader2 className="animate-spin w-5 h-5" /> : "Create Coupon"}
+                    </NeonButton>
                 </form>
             </div>
 
             {/* List */}
             <div className="space-y-4">
-                <h3 className="text-xl font-bold mb-2">Your Active Coupons</h3>
-                {coupons.length === 0 && <p className="text-gray-500">No coupons yet.</p>}
+                <h3 className="text-xl font-bold mb-4 text-white">Your Active Coupons</h3>
+                {coupons.length === 0 && <p className="text-zinc-500">No active coupons listed.</p>}
                 
                 {coupons.map(c => (
-                    <div key={c.id} className="bg-gray-900 border border-gray-800 p-6 rounded-2xl flex justify-between items-center">
+                    <div key={c.id} className="glass-premium p-6 rounded-2xl flex justify-between items-center transition hover:border-white/20">
                         <div>
-                            <p className="font-black text-2xl text-purple-400">{c.code}</p>
-                            <p className="text-gray-400">{c.percentOff}% Off</p>
+                            <p className="font-black text-2xl text-cyan-400 tracking-tight leading-none mb-1">{c.code}</p>
+                            <p className="text-sm text-zinc-400">{c.percentOff}% Off discount</p>
                         </div>
-                        <button onClick={() => handleDelete(c.id)} className="p-2 hover:bg-red-500/10 rounded-full text-red-500 transition">
-                            <Trash className="w-5 h-5" />
+                        <button onClick={() => handleDelete(c.id)} className="p-3 bg-red-500/10 hover:bg-red-500/20 rounded-full text-red-400 border border-red-500/10 transition">
+                            <Trash className="w-4 h-4" />
                         </button>
                     </div>
                 ))}

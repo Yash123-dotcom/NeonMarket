@@ -1,8 +1,10 @@
-'use client';
+"use client";
 
 import { useCart } from '@/hooks/use-cart';
 import { useState, useEffect } from 'react';
 import { ShoppingCart, Check } from 'lucide-react';
+import { useUser } from '@clerk/nextjs';
+import { useRouter } from 'next/navigation';
 
 interface Product {
   id?: string;
@@ -21,6 +23,8 @@ interface AddToCartButtonProps {
 export default function AddToCartButton({ product }: AddToCartButtonProps) {
   const { addItem, isInCart } = useCart();
   const [isMounted, setIsMounted] = useState(false);
+  const { isSignedIn } = useUser();
+  const router = useRouter();
 
   useEffect(() => {
     setIsMounted(true);
@@ -38,6 +42,12 @@ export default function AddToCartButton({ product }: AddToCartButtonProps) {
   const inCart = isInCart(product.id ?? product._id ?? '');
 
   const handleClick = () => {
+    if (!isSignedIn) {
+      // Security check: Redirect to sign-in page if guest
+      router.push(`/sign-in?redirect_url=${encodeURIComponent(window.location.pathname)}`);
+      return;
+    }
+
     if (!inCart) {
       addItem({
         id: product.id ?? product._id ?? '',

@@ -67,17 +67,20 @@ const CATEGORIES = [
 
 export default function CategoriesPage() {
   return (
-    <div className="min-h-screen bg-black text-white selection:bg-cyan-500/30">
+    <div className="min-h-screen bg-background text-white relative overflow-hidden">
       <Navbar />
 
-      <main className="pt-32 pb-24 px-6 max-w-7xl mx-auto">
+      {/* Dynamic Background Light (Animated Blobs) */}
+      <div className="absolute top-0 -left-40 w-96 h-96 bg-purple-500/10 rounded-full mix-blend-screen filter blur-[100px] opacity-70 animate-blob pointer-events-none" />
+      <div className="absolute top-40 -right-40 w-96 h-96 bg-cyan-500/10 rounded-full mix-blend-screen filter blur-[100px] opacity-70 animate-blob animation-delay-2000 pointer-events-none" />
+
+      <main className="pt-40 pb-24 px-6 max-w-7xl mx-auto relative z-10">
         {/* Header */}
         <div className="mb-16 relative">
-          <div className="absolute -top-20 -left-20 w-72 h-72 bg-blue-600/20 blur-[100px] rounded-full pointer-events-none" />
-          <h1 className="text-5xl md:text-6xl font-black tracking-tighter mb-4 relative z-10">
-            Browse <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-600">Categories</span>
+          <h1 className="text-5xl md:text-6xl font-black tracking-tighter mb-4 relative z-10 leading-none">
+            Browse <span className="text-gradient-primary">Categories</span>
           </h1>
-          <p className="text-xl text-zinc-400 max-w-2xl relative z-10">
+          <p className="text-xl text-zinc-400 max-w-2xl relative z-10 font-normal">
             Explore our curated collection of premium digital assets, tools, and templates built by top creators around the world.
           </p>
         </div>
@@ -88,7 +91,7 @@ export default function CategoriesPage() {
             <Link 
               key={category.slug} 
               href={`/products?category=${category.slug}`}
-              className="group relative bg-zinc-900/40 border border-white/10 rounded-3xl p-8 hover:bg-zinc-900/80 transition-all duration-300 overflow-hidden flex flex-col h-full"
+              className="group relative glass-premium rounded-3xl p-8 hover:bg-white/5 transition-all duration-300 overflow-hidden flex flex-col h-full"
             >
               {/* Hover Gradient Background */}
               <div className={`absolute inset-0 bg-gradient-to-br ${category.color} opacity-0 group-hover:opacity-[0.03] transition-opacity duration-500`} />

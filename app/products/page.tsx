@@ -53,10 +53,14 @@ export default async function ProductsPage({ searchParams }: ProductsPageProps) 
   const totalPages = Math.ceil(totalProducts / PRODUCTS_PER_PAGE);
 
   return (
-    <main className='min-h-screen bg-background text-foreground'>
+    <main className="min-h-screen bg-background text-foreground relative overflow-hidden">
       <Navbar />
 
-      <div className='max-w-[1400px] mx-auto px-6 pt-32 pb-20'>
+      {/* Dynamic Background Light (Animated Blobs) */}
+      <div className="absolute top-0 -left-40 w-96 h-96 bg-purple-500/10 rounded-full mix-blend-screen filter blur-[100px] opacity-70 animate-blob pointer-events-none" />
+      <div className="absolute top-40 -right-40 w-96 h-96 bg-cyan-500/10 rounded-full mix-blend-screen filter blur-[100px] opacity-70 animate-blob animation-delay-2000 pointer-events-none" />
+
+      <div className="max-w-[1400px] mx-auto px-6 pt-40 pb-20 relative z-10">
         <div className='flex flex-col md:flex-row justify-between items-end mb-16 gap-8'>
           <div>
             <h1 className='text-4xl md:text-5xl font-bold tracking-tight mb-4 text-white'>

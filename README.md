@@ -1,6 +1,6 @@
 # NeonMarket - Digital Asset Marketplace
 
-NeonMarket is a complete, production-ready e-commerce platform designed for selling digital assets such as UI kits, 3D models, templates, and software. Built on modern web technologies including Next.js 14, TypeScript, Prisma, Stripe, and Clerk.
+NeonMarket is a complete, production-ready e-commerce platform designed for selling digital assets such as UI kits, 3D models, templates, and software. Built on modern web technologies including Next.js 14, TypeScript, Mongoose, Stripe, and Clerk.
 
 ## Features
 
@@ -42,8 +42,8 @@ NeonMarket is a complete, production-ready e-commerce platform designed for sell
 
 - **Framework**: Next.js 14 (App Router)
 - **Language**: TypeScript
-- **Database**: PostgreSQL (Neon)
-- **ORM**: Prisma
+- **Database**: MongoDB (Atlas)
+- **ORM**: Mongoose
 - **Authentication**: Clerk
 - **Payments**: Stripe + Stripe Connect
 - **Styling**: Tailwind CSS
@@ -151,11 +151,10 @@ Navigate to `http://localhost:3000` to access the local development environment.
    - Subscribed Events: `checkout.session.completed`, `payment_intent.payment_failed`
 4. Enable Stripe Connect to facilitate seller payouts.
 
-### Database Setup (Neon)
-1. Register an account at neon.tech.
-2. Create a new project instance.
-3. Copy the provided connection string to the `DATABASE_URL` variable.
-4. Execute `npx prisma db push` to initialize the schema.
+### Database Setup (MongoDB)
+1. Register an account at mongodb.com/atlas.
+2. Create a new cluster.
+3. Copy the provided connection string to the `MONGODB_URI` variable.
 
 ## Project Structure
 

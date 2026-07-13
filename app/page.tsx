@@ -5,6 +5,9 @@ import { Hero } from '@/components/Hero';
 import { ProductCard } from '@/components/ProductCard';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
+import { TrustMarquee } from '@/components/TrustMarquee';
+import { Testimonials } from '@/components/Testimonials';
+import { PreFooterCTA } from '@/components/PreFooterCTA';
 import { ArrowRight, WifiOff, ShieldCheck, Zap, Download, Star } from 'lucide-react';
 
 export const dynamic = 'force-dynamic';
@@ -15,7 +18,7 @@ const MOCK_PRODUCTS: any[] = [
     name: 'Premium UI Kit',
     description: 'Complete design system with 200+ components',
     price: 4900,
-    imagePath: 'https://images.unsplash.com/photo-1545239351-1141bd82e8a6?q=80&w=800',
+    imagePath: '/images/ui-kit.png',
     category: 'UI Kits',
     averageRating: 4.8,
     reviewCount: 42,
@@ -27,7 +30,7 @@ const MOCK_PRODUCTS: any[] = [
     name: '3D Asset Pack',
     description: 'High-quality 3D models for modern apps',
     price: 6900,
-    imagePath: 'https://images.unsplash.com/photo-1614732414444-096e5f1122d5?q=80&w=800',
+    imagePath: '/images/3d-assets.png',
     category: '3D Models',
     averageRating: 4.9,
     reviewCount: 18,
@@ -39,7 +42,7 @@ const MOCK_PRODUCTS: any[] = [
     name: 'Modern Icon Set',
     description: '500+ icons in multiple styles and formats',
     price: 2900,
-    imagePath: 'https://images.unsplash.com/photo-1558655146-d09347e92766?q=80&w=800',
+    imagePath: '/images/icons.png',
     category: 'Icons',
     averageRating: 4.7,
     reviewCount: 95,
@@ -109,21 +112,22 @@ export default async function Home() {
       )}
 
       <Hero />
+      <TrustMarquee />
 
       {/* Value props */}
-      <section className="py-16 px-6 border-t border-white/[0.06] bg-zinc-950/50">
+      <section className="py-16 px-6 border-t border-white/[0.06] bg-zinc-950/80 backdrop-blur-md relative z-10">
         <div className="max-w-7xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-6">
           {VALUE_PROPS.map(({ icon: Icon, title, desc }) => (
             <div
               key={title}
-              className="flex flex-col gap-3 p-6 bg-zinc-900/40 border border-white/[0.06] rounded-2xl hover:border-white/[0.12] transition-colors duration-200"
+              className="flex flex-col gap-3 p-6 glass-premium rounded-2xl glass-card-hover"
             >
-              <div className="w-9 h-9 rounded-xl bg-blue-500/10 border border-blue-500/20 flex items-center justify-center">
-                <Icon className="w-4.5 h-4.5 text-blue-400" strokeWidth={1.8} />
+              <div className="w-10 h-10 rounded-xl bg-blue-500/20 border border-blue-500/30 flex items-center justify-center">
+                <Icon className="w-5 h-5 text-blue-400" strokeWidth={1.8} />
               </div>
               <div>
                 <p className="text-sm font-semibold text-white mb-1">{title}</p>
-                <p className="text-xs text-zinc-500 leading-relaxed">{desc}</p>
+                <p className="text-xs text-zinc-400 leading-relaxed">{desc}</p>
               </div>
             </div>
           ))}
@@ -162,6 +166,9 @@ export default async function Home() {
           )}
         </div>
       </section>
+
+      <Testimonials />
+      <PreFooterCTA />
 
       <Footer />
     </main>

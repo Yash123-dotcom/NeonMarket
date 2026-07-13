@@ -55,7 +55,7 @@ The platform takes a **10% Commission** on every sale automatically.
 | :--- | :--- | :--- |
 | **Frontend** | **Next.js 14** (App Router) | High-performance React framework. |
 | **Styling** | **Tailwind CSS** | "Neon" aesthetic, dark mode, glassmorphism. |
-| **Database** | **SQLite** (Local) / **Prisma** | manage Data (Users, Products, Orders). |
+| **Database** | **MongoDB Atlas** / **Mongoose** | manage Data (Users, Products, Orders). |
 | **Auth** | **Clerk** | Secure User Management (Login/Signup). |
 | **Payments** | **Stripe Connect** | Complex split-payments and marketplace logic. |
 | **Uploads** | **UploadThing** | Secure cloud file storage. |

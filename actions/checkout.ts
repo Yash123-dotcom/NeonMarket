@@ -1,12 +1,11 @@
 "use server";
 
 import { z } from "zod";
-import { stripe } from "@/lib/stripe";
+import { razorpay } from "@/lib/razorpay";
 import { connectDB } from "@/lib/db";
 import { Product } from "@/lib/models/Product";
 import { Coupon } from "@/lib/models/Coupon";
 import { currentUser } from "@clerk/nextjs/server";
-import { headers } from "next/headers";
 import { ActionResponse } from "@/types";
 
 const checkoutSchema = z.object({
@@ -19,7 +18,7 @@ type CheckoutInput = z.infer<typeof checkoutSchema>;
 
 export async function createCheckoutSession(
   input: CheckoutInput
-): Promise<ActionResponse<{ url: string }>> {
+): Promise<ActionResponse<{ orderId: string; amount: number; currency: string }>> {
   try {
     const user = await currentUser();
     if (!user) {
@@ -30,8 +29,7 @@ export async function createCheckoutSession(
     if (!validated.success) {
       return { success: false, message: "Invalid Input", error: validated.error.message };
     }
-    const { productIds, couponCode, licenseTierId } = validated.data;
-    const origin = (await headers()).get("origin") || "http://localhost:3000";
+    const { productIds, couponCode } = validated.data;
 
     await connectDB();
 
@@ -46,7 +44,7 @@ export async function createCheckoutSession(
     const { User } = await import("@/lib/models/User");
     const seller = await User.findById(products[0].userId).lean();
 
-    if (!seller?.stripeConnectAccountId) {
+    if (!seller?.razorpayAccountId) {
       return { success: false, message: "Seller payout setup incomplete." };
     }
 
@@ -57,48 +55,53 @@ export async function createCheckoutSession(
       if (coupon) discountPercent = coupon.percentOff;
     }
 
-    // Build Line Items
+    // Calculate total
     let totalAmount = 0;
-    const line_items: any[] = [];
-
     for (const product of products) {
       const discountedPrice = Math.round(product.price * (1 - discountPercent / 100));
       totalAmount += discountedPrice;
-      line_items.push({
-        price_data: {
-          currency: "usd",
-          product_data: {
-            name: product.name,
-            images: [product.imagePath],
-            description: product.description.substring(0, 100),
-          },
-          unit_amount: discountedPrice,
-        },
-        quantity: 1,
-      });
     }
 
+    // Platform takes 10%
     const platformFee = Math.round(totalAmount * 0.10);
-    const session = await stripe.checkout.sessions.create({
-      mode: "payment",
-      line_items,
-      success_url: `${origin}/success?session_id={CHECKOUT_SESSION_ID}`,
-      cancel_url: `${origin}/cart`,
-      customer_email: user.emailAddresses[0].emailAddress,
-      payment_intent_data: {
-        application_fee_amount: platformFee,
-        transfer_data: { destination: seller.stripeConnectAccountId },
-      },
-      metadata: {
+    const sellerTransferAmount = totalAmount - platformFee;
+
+    // Create Razorpay Order
+    const orderOptions = {
+      amount: totalAmount, // amount in smallest currency unit (paise)
+      currency: "INR",
+      receipt: `receipt_${Date.now()}`,
+      notes: {
         userId: user.id,
         productIds: JSON.stringify(productIds),
         couponCode: couponCode || "",
-        licenseTierId: licenseTierId || "",
       },
-    });
+      transfers: [
+        {
+          account: seller.razorpayAccountId,
+          amount: sellerTransferAmount,
+          currency: "INR",
+          notes: {
+            message: "Seller payout for digital assets",
+          },
+          on_hold: 0, 
+        }
+      ]
+    };
 
-    if (!session.url) throw new Error("Failed to create session URL");
-    return { success: true, message: "Checkout initialized", data: { url: session.url } };
+    const razorpayOrder = await razorpay.orders.create(orderOptions);
+
+    if (!razorpayOrder.id) throw new Error("Failed to create Razorpay Order");
+    
+    return { 
+      success: true, 
+      message: "Checkout initialized", 
+      data: { 
+        orderId: razorpayOrder.id, 
+        amount: totalAmount, 
+        currency: "INR" 
+      } 
+    };
 
   } catch (error) {
     console.error("Checkout Error:", error);

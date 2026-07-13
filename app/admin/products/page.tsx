@@ -1,6 +1,7 @@
 import { connectDB } from '@/lib/db';
 import { Product } from '@/lib/models/Product';
 import Link from 'next/link';
+import Image from 'next/image';
 import { Edit, PlusCircle, Package } from 'lucide-react';
 
 export const dynamic = 'force-dynamic';
@@ -40,7 +41,7 @@ export default async function AdminProductsPage() {
             >
               <div className='flex items-center gap-5'>
                 <div className='w-16 h-16 bg-black rounded-lg overflow-hidden border border-white/10'>
-                  <img src={product.imagePath} alt={product.name} className='w-full h-full object-cover' />
+                  <Image src={product.imagePath} alt={product.name} width={64} height={64} className='w-full h-full object-cover' />
                 </div>
                 <div>
                   <h3 className='font-bold text-white text-lg'>{product.name}</h3>

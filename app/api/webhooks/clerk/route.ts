@@ -14,10 +14,16 @@ export async function POST(req: Request) {
     return new Response("Error -- no svix headers", { status: 400 });
   }
 
+  const secret = process.env.CLERK_WEBHOOK_SECRET;
+  if (!secret) {
+    console.error("CLERK_WEBHOOK_SECRET is not configured in .env");
+    return new Response("Webhook secret not configured", { status: 500 });
+  }
+
   const payload = await req.json();
   const body = JSON.stringify(payload);
 
-  const wh = new Webhook(process.env.CLERK_WEBHOOK_SECRET || "");
+  const wh = new Webhook(secret);
   let evt: WebhookEvent;
 
   try {

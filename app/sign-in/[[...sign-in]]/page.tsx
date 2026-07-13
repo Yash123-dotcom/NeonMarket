@@ -147,15 +147,17 @@ export default function SignInPage() {
               <SignIn
                 appearance={{
                   layout: {
-                    socialButtonsPlacement: 'bottom',
-                    socialButtonsVariant: 'iconButton',
+                    socialButtonsPlacement: 'top',
+                    socialButtonsVariant: 'blockButton',
                   },
                   elements: {
-                    socialButtonsBlockButton: { display: 'none' },
-                    socialButtonsIconButton: { display: 'none' },
-                    dividerRow: { display: 'none' },
-                    dividerText: { display: 'none' },
-                    dividerLine: { display: 'none' },
+                    socialButtonsBlockButton: 
+                      'w-full bg-white/5 hover:bg-white/10 border border-white/10 text-white font-semibold rounded-xl py-3 text-sm transition-all duration-200 flex items-center justify-center gap-3 box-border',
+                    socialButtonsIconButton: 
+                      'bg-white/5 hover:bg-white/10 border border-white/10 text-white rounded-xl py-3 transition-all duration-200',
+                    dividerRow: 'flex items-center justify-center gap-3 my-5',
+                    dividerText: 'text-zinc-500 text-xs font-medium px-2',
+                    dividerLine: 'bg-white/10 h-px flex-1',
 
                     card: 'bg-transparent shadow-none border-0 p-0 m-0 w-full max-w-full',
                     rootBox: 'w-full max-w-full flex flex-col',

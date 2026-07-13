@@ -16,7 +16,8 @@ export interface IOrder extends Document {
   couponCode?: string;
   /** @deprecated Use status === 'paid' instead */
   isPaid: boolean;
-  stripePaymentIntentId?: string;
+  razorpayOrderId?: string;
+  razorpayPaymentId?: string;
   items: IOrderItem[];
   downloadLinks: string[];
   createdAt: Date;
@@ -45,7 +46,8 @@ const OrderSchema = new Schema<IOrder>(
     pricePaidInCents: { type: Number, required: true, min: 0 },
     couponCode: { type: String },
     isPaid: { type: Boolean, default: false },
-    stripePaymentIntentId: { type: String, unique: true, sparse: true },
+    razorpayOrderId: { type: String, unique: true, sparse: true },
+    razorpayPaymentId: { type: String, unique: true, sparse: true },
     items: [OrderItemSchema],
     downloadLinks: { type: [String], default: [] },
   },

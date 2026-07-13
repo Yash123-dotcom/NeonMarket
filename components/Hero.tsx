@@ -21,8 +21,10 @@ export function Hero() {
   return (
     <div ref={ref} className="relative min-h-[90vh] flex items-center justify-center overflow-hidden bg-background pt-20">
       
-      {/* Dynamic Background Light (Subtle) */}
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_0%,rgba(59,130,246,0.15),rgba(0,0,0,0)_70%)] pointer-events-none" />
+      {/* Dynamic Background Light (Animated Blobs) */}
+      <div className="absolute top-0 -left-40 w-96 h-96 bg-purple-500/20 rounded-full mix-blend-screen filter blur-[100px] opacity-70 animate-blob pointer-events-none" />
+      <div className="absolute top-20 -right-40 w-96 h-96 bg-cyan-500/20 rounded-full mix-blend-screen filter blur-[100px] opacity-70 animate-blob animation-delay-2000 pointer-events-none" />
+      <div className="absolute -bottom-40 left-20 w-[30rem] h-[30rem] bg-indigo-500/20 rounded-full mix-blend-screen filter blur-[100px] opacity-70 animate-blob animation-delay-4000 pointer-events-none" />
       
       <div className="relative z-10 px-6 max-w-[1400px] mx-auto w-full">
         <motion.div 
@@ -50,11 +52,11 @@ export function Hero() {
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.1, duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-            className="text-7xl md:text-8xl lg:text-9xl font-bold tracking-[-0.03em] leading-[0.95] mb-8 text-white h-[160px] sm:h-[180px] md:h-[220px]"
+            className="text-7xl md:text-8xl lg:text-9xl font-bold tracking-tight leading-[0.95] mb-8 text-white h-[160px] sm:h-[180px] md:h-[220px]"
           >
             Digital Assets.
             <br />
-            <span className="text-gradient-primary">
+            <span className="text-gradient-primary animate-text-shimmer">
               <Typewriter words={["Redefined.", "Elevated.", "Perfected.", "Unleashed."]} />
             </span>
           </motion.h1>
@@ -74,7 +76,7 @@ export function Hero() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.3, duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-            className="flex flex-col sm:flex-row gap-6 items-center"
+            className="flex flex-col sm:flex-row gap-6 items-center mb-16"
           >
             <Link href="/products">
               <NeonButton>
@@ -89,6 +91,39 @@ export function Hero() {
               <span>Selling on NeonMarket</span>
               <ArrowRight className="w-4 h-4 group-hover:translate-x-0.5 transition-transform text-blue-400" />
             </Link>
+          </motion.div>
+
+          {/* Floating Trust Badge */}
+          <motion.div
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ delay: 0.6, duration: 0.5, ease: "easeOut" }}
+            className="flex items-center gap-4 bg-white/5 border border-white/10 rounded-full px-5 py-2.5 backdrop-blur-md"
+          >
+            <div className="flex -space-x-3">
+              {[
+                "/images/avatar-1.png",
+                "/images/avatar-2.png",
+                "/images/avatar-3.png",
+                "/images/avatar-4.png"
+              ].map((src, i) => (
+                <img 
+                  key={i} 
+                  src={src} 
+                  alt={`User avatar ${i + 1}`} 
+                  className="w-8 h-8 rounded-full border-2 border-zinc-900 object-cover relative z-[4-i]"
+                  style={{ zIndex: 4 - i }}
+                />
+              ))}
+            </div>
+            <div className="text-left">
+              <div className="flex text-yellow-400 text-xs">
+                ★★★★★
+              </div>
+              <p className="text-xs text-zinc-400 font-medium">
+                Trusted by <span className="text-white">10,000+</span> creators
+              </p>
+            </div>
           </motion.div>
         </motion.div>
       </div>

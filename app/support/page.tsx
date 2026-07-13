@@ -29,41 +29,44 @@ const FAQS = [
 
 export default function SupportPage() {
   return (
-    <div className="min-h-screen bg-black text-white selection:bg-cyan-500/30">
+    <div className="min-h-screen bg-background text-white relative overflow-hidden">
       <Navbar />
 
-      <main className="pt-32 pb-24 px-6 max-w-4xl mx-auto">
+      {/* Dynamic Background Light (Animated Blobs) */}
+      <div className="absolute top-0 -left-40 w-96 h-96 bg-purple-500/10 rounded-full mix-blend-screen filter blur-[100px] opacity-70 animate-blob pointer-events-none" />
+      <div className="absolute top-40 -right-40 w-96 h-96 bg-cyan-500/10 rounded-full mix-blend-screen filter blur-[100px] opacity-70 animate-blob animation-delay-2000 pointer-events-none" />
+
+      <main className="pt-32 pb-24 px-6 max-w-4xl mx-auto relative z-10">
         {/* Header */}
         <div className="text-center mb-16 relative">
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-64 h-64 bg-blue-600/30 blur-[120px] rounded-full pointer-events-none" />
-          <h1 className="text-4xl md:text-6xl font-black tracking-tighter mb-4 relative z-10">
-            How can we <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-cyan-400">help?</span>
+          <h1 className="text-4xl md:text-6xl font-black tracking-tighter mb-4 relative z-10 leading-none">
+            How can we <span className="text-gradient-primary">help?</span>
           </h1>
-          <p className="text-xl text-zinc-400 relative z-10">
+          <p className="text-xl text-zinc-400 relative z-10 font-normal">
             Find answers to common questions or reach out to our team directly.
           </p>
         </div>
 
         {/* Contact Options */}
         <div className="grid md:grid-cols-2 gap-6 mb-20 relative z-10">
-          <div className="bg-zinc-900/50 border border-white/10 rounded-3xl p-8 hover:bg-zinc-900/80 transition-colors">
+          <div className="glass-premium rounded-3xl p-8 hover:bg-white/5 transition-all duration-300">
             <div className="w-12 h-12 bg-blue-500/20 rounded-xl flex items-center justify-center mb-6">
               <Mail className="w-6 h-6 text-blue-400" />
             </div>
             <h3 className="text-xl font-bold mb-2">Email Support</h3>
-            <p className="text-zinc-400 mb-6 text-sm">Our typical response time is under 12 hours for order issues and technical support.</p>
-            <a href="mailto:support@neonmarket.example" className="inline-flex items-center text-sm font-bold text-white bg-white/10 hover:bg-white/20 px-4 py-2 rounded-full transition-colors">
+            <p className="text-zinc-400 mb-6 text-sm leading-relaxed">Our typical response time is under 12 hours for order issues and technical support.</p>
+            <a href="mailto:support@neonmarket.com" className="inline-flex items-center text-sm font-bold text-white bg-white/10 hover:bg-white/20 px-5 py-2.5 rounded-full transition-colors border border-white/5">
               support@neonmarket.com
             </a>
           </div>
 
-          <div className="bg-zinc-900/50 border border-white/10 rounded-3xl p-8 hover:bg-zinc-900/80 transition-colors">
+          <div className="glass-premium rounded-3xl p-8 hover:bg-white/5 transition-all duration-300">
             <div className="w-12 h-12 bg-cyan-500/20 rounded-xl flex items-center justify-center mb-6">
               <FileText className="w-6 h-6 text-cyan-400" />
             </div>
             <h3 className="text-xl font-bold mb-2">Creator Documentation</h3>
-            <p className="text-zinc-400 mb-6 text-sm">Are you a seller trying to set up payouts or upload large files? Read our seller guide.</p>
-            <Link href="/sell" className="inline-flex items-center text-sm font-bold text-black bg-white hover:bg-gray-200 px-4 py-2 rounded-full transition-colors">
+            <p className="text-zinc-400 mb-6 text-sm leading-relaxed">Are you a seller trying to set up payouts or upload large files? Read our seller guide.</p>
+            <Link href="/sell" className="inline-flex items-center text-sm font-bold text-black bg-white hover:bg-zinc-200 px-5 py-2.5 rounded-full transition-colors">
               Read Guide
             </Link>
           </div>
@@ -72,14 +75,14 @@ export default function SupportPage() {
         {/* FAQ Section */}
         <div className="relative z-10">
           <div className="flex items-center gap-3 mb-10">
-            <HelpCircle className="w-8 h-8 text-blue-500" />
+            <HelpCircle className="w-8 h-8 text-blue-400" />
             <h2 className="text-3xl font-black">Frequently Asked Questions</h2>
           </div>
           
           <div className="space-y-6">
             {FAQS.map((faq, i) => (
-              <div key={i} className="bg-white/5 border border-white/10 p-8 rounded-3xl">
-                <h3 className="text-lg font-bold mb-4 text-white/90">{faq.q}</h3>
+              <div key={i} className="glass-premium p-8 rounded-3xl">
+                <h3 className="text-lg font-bold mb-4 text-white">{faq.q}</h3>
                 <p className="text-zinc-400 leading-relaxed text-sm">{faq.a}</p>
               </div>
             ))}

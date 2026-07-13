@@ -32,13 +32,13 @@ export default function Navbar() {
 
   return (
     <nav
-      className={`fixed top-0 w-full z-50 transition-all duration-300 ${
+      className={`fixed top-4 left-1/2 -translate-x-1/2 z-50 transition-all duration-500 w-[95%] max-w-[900px] rounded-full ${
         isScrolled
-          ? 'bg-black/50 backdrop-blur-xl border-b border-white/10 shadow-lg'
-          : 'bg-transparent py-4'
+          ? 'bg-zinc-900/70 backdrop-blur-3xl border border-white/10 shadow-[0_8px_32px_rgba(0,0,0,0.4)] py-3'
+          : 'bg-zinc-900/30 backdrop-blur-md border border-white/5 py-4'
       }`}
     >
-      <div className='max-w-[1400px] mx-auto px-6 h-14 flex items-center justify-between'>
+      <div className='px-6 h-10 flex items-center justify-between'>
         {/* Logo */}
         <Link
           href='/'
@@ -55,6 +55,14 @@ export default function Navbar() {
           >
             Store
           </Link>
+          {isSignedIn && (
+            <Link
+              href='/dashboard'
+              className='text-[13px] font-medium text-zinc-400 hover:text-white transition-colors'
+            >
+              Dashboard
+            </Link>
+          )}
           <Link
             href='/categories'
             className='text-[13px] font-medium text-zinc-400 hover:text-white transition-colors'
@@ -126,7 +134,7 @@ export default function Navbar() {
 
       {/* Mobile Menu */}
       {mobileMenuOpen && (
-        <div className='md:hidden absolute top-full left-0 w-full bg-black/95 backdrop-blur-3xl border-b border-white/10 shadow-xl'>
+        <div className='md:hidden absolute top-[calc(100%+10px)] left-0 w-full bg-zinc-900/95 backdrop-blur-3xl border border-white/10 shadow-2xl rounded-2xl overflow-hidden'>
           <div className='px-6 py-6 space-y-4'>
             <Link
               href='/products'
@@ -135,6 +143,15 @@ export default function Navbar() {
             >
               Store
             </Link>
+            {isSignedIn && (
+              <Link
+                href='/dashboard'
+                className='block text-xl font-semibold text-white'
+                onClick={() => setMobileMenuOpen(false)}
+              >
+                Dashboard
+              </Link>
+            )}
             <Link
               href='/categories'
               className='block text-xl font-semibold text-white'

@@ -8,6 +8,7 @@ import { ReviewForm } from '@/components/ReviewForm';
 import { ReviewsList } from '@/components/ReviewsList';
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
+import Image from 'next/image';
 import Navbar from '@/components/Navbar';
 import {
   Star,
@@ -84,10 +85,14 @@ export default async function ProductPage({ params }: ProductPageProps) {
   const reviewCount = product.reviewCount ?? product.reviews.length;
 
   return (
-    <main className="min-h-screen bg-background font-sans">
+    <main className="min-h-screen bg-background font-sans relative overflow-hidden">
       <Navbar />
 
-      <div className="max-w-[1200px] mx-auto px-6 pt-32 pb-20">
+      {/* Dynamic Background Light (Animated Blobs) */}
+      <div className="absolute top-0 -left-40 w-96 h-96 bg-purple-500/10 rounded-full mix-blend-screen filter blur-[100px] opacity-70 animate-blob pointer-events-none" />
+      <div className="absolute top-40 -right-40 w-96 h-96 bg-cyan-500/10 rounded-full mix-blend-screen filter blur-[100px] opacity-70 animate-blob animation-delay-2000 pointer-events-none" />
+
+      <div className="max-w-[1200px] mx-auto px-6 pt-40 pb-20 relative z-10">
         {/* Back link */}
         <Link
           href="/products"
@@ -102,10 +107,11 @@ export default async function ProductPage({ params }: ProductPageProps) {
           {/* Left — image */}
           <div className="relative sticky top-32">
             <div className="relative aspect-square bg-zinc-900 rounded-[28px] overflow-hidden shadow-2xl shadow-black/50 ring-1 ring-white/[0.06]">
-              <img
+              <Image
                 src={product.imagePath}
                 alt={product.name}
-                className="w-full h-full object-cover"
+                fill
+                className="object-cover"
               />
               {/* Category overlay */}
               {product.category && (
@@ -127,7 +133,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
               ].map(({ icon: Icon, label }) => (
                 <div
                   key={label}
-                  className="flex flex-col items-center gap-2 p-4 bg-zinc-900/60 border border-white/[0.06] rounded-2xl text-center"
+                  className="flex flex-col items-center gap-2 p-4 glass-premium rounded-2xl text-center hover:scale-[1.02] transition-transform duration-300"
                 >
                   <Icon className="w-5 h-5 text-blue-400" strokeWidth={1.5} />
                   <p className="text-[11px] font-semibold tracking-wide uppercase text-zinc-500 leading-tight">
@@ -179,8 +185,8 @@ export default async function ProductPage({ params }: ProductPageProps) {
               </span>
             </div>
 
-            {/* Price + CTA */}
-            <div className="bg-zinc-900/80 border border-white/[0.08] rounded-[22px] p-7 mb-10 space-y-5">
+             {/* Price + CTA */}
+            <div className="glass-premium rounded-[22px] p-7 mb-10 space-y-5">
               <div>
                 <div className="flex items-baseline gap-3 mb-1">
                   <span className="text-4xl font-bold text-white">${(product.price / 100).toFixed(0)}</span>
@@ -252,7 +258,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
 
           <div className="max-w-3xl mx-auto space-y-8">
             {hasPurchased && !hasReviewed && (
-              <div className="bg-zinc-900/60 border border-white/[0.07] p-8 rounded-[24px]">
+              <div className="glass-premium p-8 rounded-[24px]">
                 <h3 className="text-lg font-semibold mb-6 text-white">Share your experience</h3>
                 <ReviewForm productId={productId} />
               </div>

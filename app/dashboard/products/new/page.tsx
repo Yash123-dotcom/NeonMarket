@@ -1,122 +1,73 @@
-"use client";
-
-import { createProduct } from "@/actions/create-product";
+import { auth } from "@clerk/nextjs/server";
+import { connectDB } from "@/lib/db";
+import { User } from "@/lib/models/User";
+import { redirect } from "next/navigation";
+import Link from "next/link";
 import Navbar from "@/components/Navbar";
-import { UploadDropzone } from "@/utils/uploadthing";
-import { useState } from "react";
-import { toast } from "sonner";
-import { Loader2 } from "lucide-react";
+import AddProductForm from "@/components/AddProductForm";
+import { ArrowLeft, AlertTriangle } from "lucide-react";
+import { NeonButton } from "@/components/NeonButton";
 
-export default function AddProductPage() {
-  const [loading, setLoading] = useState(false);
-  const [imageUrl, setImageUrl] = useState("");
-  const [fileUrl, setFileUrl] = useState("");
+export default async function AddProductPage() {
+  const { userId } = await auth();
+  if (!userId) {
+    return redirect("/sign-in");
+  }
 
-  const handleSubmit = async (formData: FormData) => {
-    setLoading(true);
-    try {
-        await createProduct(formData);
-        toast.success("Product created!");
-    } catch (error) {
-        toast.error("Something went wrong");
-        console.error(error);
-        setLoading(false);
-    }
-  };
+  await connectDB();
+
+  // Load user profile
+  const dbUser = await User.findById(userId).lean();
+  const hasPayouts = dbUser?.isSeller && !!dbUser?.razorpayAccountId;
 
   return (
-    <div className="min-h-screen bg-black text-white pb-20">
+    <main className="min-h-screen bg-background text-white relative overflow-hidden pb-20">
       <Navbar />
-      <div className="max-w-3xl mx-auto px-6 pt-32">
-        <h1 className="text-4xl font-black mb-8">Add New Product</h1>
 
-        <form action={handleSubmit} className="space-y-8 bg-gray-900/50 p-8 rounded-3xl border border-gray-800">
+      {/* Dynamic Background Light (Animated Blobs) */}
+      <div className="absolute top-0 -left-40 w-96 h-96 bg-purple-500/10 rounded-full mix-blend-screen filter blur-[100px] opacity-70 animate-blob pointer-events-none" />
+      <div className="absolute top-40 -right-40 w-96 h-96 bg-cyan-500/10 rounded-full mix-blend-screen filter blur-[100px] opacity-70 animate-blob animation-delay-2000 pointer-events-none" />
+
+      <div className="max-w-3xl mx-auto px-6 pt-32 relative z-10">
+        
+        {/* Back Link */}
+        <div className="mb-6">
+          <Link 
+            href="/dashboard/products" 
+            className="inline-flex items-center gap-2 text-sm text-zinc-400 hover:text-white transition-colors"
+          >
+            <ArrowLeft className="w-4 h-4" />
+            Back to Products
+          </Link>
+        </div>
+
+        {hasPayouts ? (
+          <>
+            <h1 className="text-4xl font-black mb-2 tracking-tight leading-none">Add New Product</h1>
+            <p className="text-zinc-400 mb-8 font-normal">
+              List your digital assets in the marketplace and start selling instantly.
+            </p>
+            <AddProductForm />
+          </>
+        ) : (
+          <div className="glass-premium rounded-3xl p-8 text-center max-w-xl mx-auto mt-10 shadow-2xl relative">
+            <div className="w-16 h-16 bg-amber-500/10 rounded-2xl flex items-center justify-center mx-auto mb-6 border border-amber-500/20">
+              <AlertTriangle className="w-8 h-8 text-amber-400" />
+            </div>
             
-            {/* Name */}
-            <div>
-                <label className="block text-sm font-bold mb-2 text-gray-400">Product Name</label>
-                <input name="name" required className="w-full bg-black border border-gray-700 rounded-xl p-4 focus:ring-2 focus:ring-purple-500 outline-none transition" placeholder="e.g. Cyberpunk UI Kit" />
-            </div>
+            <h2 className="text-2xl font-bold mb-3 tracking-tight">Payout Setup Required</h2>
+            <p className="text-zinc-400 leading-relaxed mb-8 text-sm">
+              Before you can list products on the marketplace, you must complete your seller payout onboarding. This allows transactions to be routed directly to your account.
+            </p>
 
-            {/* Description */}
-            <div>
-                <label className="block text-sm font-bold mb-2 text-gray-400">Description</label>
-                <textarea name="description" required rows={4} className="w-full bg-black border border-gray-700 rounded-xl p-4 focus:ring-2 focus:ring-purple-500 outline-none transition" placeholder="Describe your asset..." />
-            </div>
-
-            {/* Price */}
-            <div>
-                <label className="block text-sm font-bold mb-2 text-gray-400">Price (USD)</label>
-                <div className="relative">
-                    <span className="absolute left-4 top-4 text-gray-500">$</span>
-                    <input name="price" type="number" step="0.01" required className="w-full bg-black border border-gray-700 rounded-xl p-4 pl-8 focus:ring-2 focus:ring-purple-500 outline-none transition" placeholder="29.99" />
-                </div>
-            </div>
-
-            {/* Image Upload */}
-            <div>
-                <label className="block text-sm font-bold mb-2 text-gray-400">Product Thumbnail</label>
-                {imageUrl ? (
-                    <div className="relative aspect-video rounded-xl overflow-hidden border border-purple-500/50">
-                        <img src={imageUrl} alt="Preview" className="w-full h-full object-cover" />
-                        <input type="hidden" name="imagePath" value={imageUrl} />
-                    </div>
-                ) : (
-                    <UploadDropzone
-                        endpoint="imageUploader"
-                        onClientUploadComplete={(res: any) => {
-                            setImageUrl(res[0].url);
-                            toast.success("Image uploaded!");
-                        }}
-                        onUploadError={(error: Error) => {
-                            toast.error(`ERROR! ${error.message}`);
-                        }}
-                        appearance={{
-                            container: "border-gray-700 bg-black hover:bg-gray-900 transition",
-                            label: "text-gray-400 hover:text-white",
-                            allowedContent: "text-gray-500"
-                        }}
-                    />
-                )}
-            </div>
-
-            {/* File Upload */}
-            <div>
-                <label className="block text-sm font-bold mb-2 text-gray-400">Digital Asset File (Zip, PDF, etc)</label>
-                {fileUrl ? (
-                    <div className="p-4 bg-green-500/10 border border-green-500/30 rounded-xl text-green-400 text-sm font-bold flex items-center gap-2">
-                        ✓ File Uploaded Successfully
-                        <input type="hidden" name="filePath" value={fileUrl} />
-                    </div>
-                ) : (
-                    <UploadDropzone
-                        endpoint="productFile"
-                        onClientUploadComplete={(res: any) => {
-                            setFileUrl(res[0].url);
-                            toast.success("File uploaded!");
-                        }}
-                        onUploadError={(error: Error) => {
-                            toast.error(`ERROR! ${error.message}`);
-                        }}
-                        appearance={{
-                            container: "border-gray-700 bg-black hover:bg-gray-900 transition",
-                            label: "text-gray-400 hover:text-white",
-                            allowedContent: "text-gray-500"
-                        }}
-                    />
-                )}
-            </div>
-
-            {/* Submit */}
-            <button 
-                disabled={loading || !imageUrl || !fileUrl}
-                className="w-full bg-gradient-to-r from-purple-600 to-pink-600 text-white font-black py-4 rounded-xl text-lg hover:scale-[1.02] active:scale-[0.98] transition disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
-            >
-                {loading && <Loader2 className="animate-spin" />}
-                {loading ? "Creating..." : "Publish Product"}
-            </button>
-        </form>
+            <Link href="/dashboard" className="block">
+              <NeonButton className="w-full text-sm py-4 shadow-[0_0_20px_rgba(59,130,246,0.3)]">
+                Go to Dashboard Onboarding
+              </NeonButton>
+            </Link>
+          </div>
+        )}
       </div>
-    </div>
+    </main>
   );
 }

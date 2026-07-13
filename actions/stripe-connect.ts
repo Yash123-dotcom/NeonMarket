@@ -1,7 +1,6 @@
 "use server";
 
 import { currentUser } from "@clerk/nextjs/server";
-import { stripe } from "@/lib/stripe";
 import { connectDB } from "@/lib/db";
 import { User } from "@/lib/models/User";
 import { redirect } from "next/navigation";
@@ -28,35 +27,22 @@ export async function createSellerAccount() {
     );
   }
 
-  let accountId = existingUser!.stripeConnectAccountId;
+  let accountId = existingUser!.razorpayAccountId;
 
   if (!accountId) {
-    const account = await stripe.accounts.create({
-      type: "express",
-      country: "US",
-      email: user.emailAddresses[0].emailAddress,
-      capabilities: {
-        card_payments: { requested: true },
-        transfers: { requested: true },
-      },
-      metadata: { userId: user.id },
+    // Generate a mock Razorpay Account ID for Route payouts
+    accountId = `acc_${Math.random().toString(36).substring(2, 12)}`;
+
+    // Mark user as seller and save Razorpay account ID
+    await User.findByIdAndUpdate(user.id, { 
+      razorpayAccountId: accountId, 
+      isSeller: true,
+      payoutEnabled: true 
     });
-
-    accountId = account.id;
-
-    // Mark user as seller and save Stripe account ID
-    await User.findByIdAndUpdate(user.id, { stripeConnectAccountId: accountId, isSeller: true });
   } else {
-    // Ensure isSeller is true even if they had an account before
+    // Ensure isSeller is true
     await User.findByIdAndUpdate(user.id, { isSeller: true });
   }
 
-  const accountLink = await stripe.accountLinks.create({
-    account: accountId!,
-    refresh_url: `${process.env.NEXT_PUBLIC_URL}/sell`,
-    return_url: `${process.env.NEXT_PUBLIC_URL}/dashboard`,
-    type: "account_onboarding",
-  });
-
-  return redirect(accountLink.url);
+  return redirect("/dashboard");
 }

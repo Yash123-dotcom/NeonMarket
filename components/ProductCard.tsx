@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { motion } from "framer-motion";
 import { Star, Download, Tag } from "lucide-react";
 
@@ -37,14 +38,15 @@ export function ProductCard({ product, index }: ProductCardProps) {
       className="group"
     >
       <Link href={`/product/${productId}`} className="block">
-        <div className="relative flex flex-col bg-zinc-900 border border-white/[0.06] rounded-2xl overflow-hidden transition-all duration-300 hover:border-white/[0.14] hover:shadow-xl hover:shadow-black/40 hover:-translate-y-1 will-change-transform">
+        <div className="relative flex flex-col glass-premium rounded-2xl overflow-hidden transition-all duration-300 glass-card-hover">
           {/* Image */}
-          <div className="relative aspect-[4/3] overflow-hidden bg-zinc-800">
-            <img
+          <div className="relative aspect-[4/3] overflow-hidden bg-black/50">
+            <Image
               src={product.imagePath}
               alt={product.name}
-              className="w-full h-full object-cover transition-transform duration-500 ease-out group-hover:scale-105 will-change-transform"
-              loading="lazy"
+              fill
+              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+              className="object-cover transition-transform duration-500 ease-out group-hover:scale-105 will-change-transform"
             />
             {/* Category badge */}
             {product.category && (
